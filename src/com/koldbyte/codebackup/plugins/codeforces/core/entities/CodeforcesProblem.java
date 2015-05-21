@@ -16,6 +16,7 @@ public class CodeforcesProblem extends Problem {
 	private final String HTTP = "http://";
 	private final String PROBLEMURL = "codeforces.com/contest/:c/problem/:p";
 
+	
 	@Override
 	public String fetchProblemStatement() {
 
@@ -68,6 +69,11 @@ public class CodeforcesProblem extends Problem {
 			this.setProblemId(u);
 		}
 		return super.getProblemId();
+	}
+
+	public CodeforcesProblem(String problemId, String url) {
+		super(problemId, url);
+		
 	}
 
 }

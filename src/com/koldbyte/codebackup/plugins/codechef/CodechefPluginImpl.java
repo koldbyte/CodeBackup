@@ -19,7 +19,6 @@ import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefSubmission
 public class CodechefPluginImpl implements PluginInterface {
 	private final String LISTPAGE = "http://www.codechef.com/users/";
 
-	@Override
 	public List<Submission> getSolvedList(User user) {
 		String url = LISTPAGE + user.getHandle();
 		ArrayList<Submission> submissions = new ArrayList<Submission>();

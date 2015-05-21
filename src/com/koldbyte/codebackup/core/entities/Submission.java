@@ -34,8 +34,11 @@ public abstract class Submission {
 		this.problem = problem;
 		this.user = user;
 
-		this.submissionId = getSubmissionId();
-		this.submissionUrl = getSubmissionUrlFromId();
+		if(submissionId == null || submissionId.isEmpty())
+			this.submissionId = getSubmissionId();
+		
+		if(submissionUrl == null || submissionUrl.isEmpty())
+			this.submissionUrl = getSubmissionUrlFromId();
 	}
 
 	public String getSubmissionUrl() {
