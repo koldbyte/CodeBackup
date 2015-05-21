@@ -12,6 +12,14 @@ public class CodechefProblem extends Problem {
 	private final String HTTP = "http://";
 	private final String PROBLEMURLPREFIX = "www.codechef.com/problems/";
 
+	public CodechefProblem(String url) {
+		super(url);
+	}
+
+	public CodechefProblem(String problemId, String url) {
+		super(problemId, url);
+	}
+
 	@Override
 	public String fetchProblemStatement() {
 		/*-
@@ -23,7 +31,8 @@ public class CodechefProblem extends Problem {
 		 */
 		Document doc;
 		try {
-			doc = Jsoup.connect("http://example.com/").get();
+			String u = getUrl();
+			doc = Jsoup.connect(u).get();
 			Elements problems = doc
 					.getElementsByClass("primary-colum-width-left");
 			this.setProblemStatement(problems.html());

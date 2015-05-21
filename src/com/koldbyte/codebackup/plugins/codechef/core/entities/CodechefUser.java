@@ -6,6 +6,10 @@ public class CodechefUser extends User {
 	private final String HTTP = "http://";
 	private final String PROFILEURLPREFIX = "www.codechef.com/users/";
 
+	public CodechefUser(String handle, String profileUrl) {
+		super(handle, profileUrl);
+	}
+
 	@Override
 	public String getHandleFromProfileUrl() {
 		return HTTP + PROFILEURLPREFIX + this.handle;

@@ -1,13 +1,13 @@
 package com.koldbyte.codebackup.core.entities;
 
 public abstract class Submission {
-	private String submissionId;
-	private String submissionUrl;
-	private String timestamp;
-	private String code;
-	private LanguagesEnum language;
-	private Problem problem;
-	private Problem user;
+	protected String submissionId;
+	protected String submissionUrl;
+	protected String timestamp;
+	protected String code;
+	protected LanguagesEnum language;
+	protected Problem problem;
+	protected User user;
 
 	public Submission() {
 		super();
@@ -27,7 +27,7 @@ public abstract class Submission {
 	}
 
 	public Submission(String submissionId, String submissionUrl,
-			Problem problem, Problem user) {
+			Problem problem, User user) {
 		super();
 		this.submissionId = submissionId;
 		this.submissionUrl = submissionUrl;
@@ -45,7 +45,7 @@ public abstract class Submission {
 		return submissionUrl;
 	}
 
-	public Problem getUser() {
+	public User getUser() {
 		return user;
 	}
 
@@ -76,7 +76,7 @@ public abstract class Submission {
 		this.submissionUrl = submissionUrl;
 	}
 
-	public void setUser(Problem user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
