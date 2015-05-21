@@ -10,8 +10,9 @@ import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 
 public class TestApp {
 	public static void main(String[] args) {
-		//test1(); //passed
-		//test2(); //passed
+		// test1(); //passed
+		// test2(); //passed
+		// test3(); //passed
 	}
 
 	public static void test1() {
@@ -24,8 +25,23 @@ public class TestApp {
 				"http://www.codechef.com/users/bhaskardivya");
 		PluginInterface plugin = new CodechefPluginImpl();
 		List<Submission> list = plugin.getSolvedList(u);
-		for(Submission s : list){
-			System.out.println("Sub->" + s.getSubmissionId() + " ,problem->" + s.getProblem().getProblemId());
+		for (Submission s : list) {
+			System.out.println("Sub->" + s.getSubmissionId() + " ,problem->"
+					+ s.getProblem().getProblemId() + ", url->"
+					+ s.getSubmissionUrl());
+		}
+	}
+
+	public static void test3() {
+		User u = new CodechefUser("bhaskardivya",
+				"http://www.codechef.com/users/bhaskardivya");
+		PluginInterface plugin = new CodechefPluginImpl();
+		List<Submission> list = plugin.getSolvedList(u);
+		for (Submission s : list) {
+			System.out.println("Sub->" + s.getSubmissionId() + " ,problem->"
+					+ s.getProblem().getProblemId() + ", url->"
+					+ s.getSubmissionUrl());
+			System.out.println(s.getCode());
 		}
 	}
 }

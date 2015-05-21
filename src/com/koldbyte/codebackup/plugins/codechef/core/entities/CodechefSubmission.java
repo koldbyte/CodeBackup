@@ -1,10 +1,8 @@
 package com.koldbyte.codebackup.plugins.codechef.core.entities;
 
-import java.io.IOException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Entities.EscapeMode;
 
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
@@ -13,7 +11,7 @@ import com.koldbyte.codebackup.core.entities.User;
 public class CodechefSubmission extends Submission {
 
 	private final String HTTP = "http://";
-	private final String SOLUTIONURLPREFIX = "www.codechef.com/viewsolution/";
+	private final String SOLUTIONURLPREFIX = "www.codechef.com/viewplaintext/";
 
 	public CodechefSubmission(String submissionId, String submissionUrl,
 			Problem problem, User user) {
@@ -23,26 +21,27 @@ public class CodechefSubmission extends Submission {
 	@Override
 	public String fetchSubmittedCode() {
 		String subUrl = getSubmissionUrl();
+		String code = "";
 		try {
 			Document doc = Jsoup.connect(subUrl).get();
-			Elements elem = doc.select("#solutiondiv");
-			elem = elem.select("pre");
-			//TODO: Language can be set here also
-			//String language = elem.attr("class");
-			String code = elem.get(1).text();
-			setCode(code);
-		} catch (IOException e) {
+			
+			//remove html entities from the code
+			doc.outputSettings().escapeMode(EscapeMode.xhtml);
+			
+			code = doc.select("pre").text();
+			
+			setCode(code.toString());
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		return null;
+
+		return code.toString();
 	}
 
 	@Override
 	public String getSubmissionIdFromUrl() {
-		// format http://www.codechef.com/viewsolution/1559626
+		// format http://www.codechef.com/viewplaintext/5189360
 		String url = submissionUrl;
 		url = url.replace(HTTP, "");
 		url = url.replace(SOLUTIONURLPREFIX, "");
