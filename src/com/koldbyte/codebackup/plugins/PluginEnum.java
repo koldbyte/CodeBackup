@@ -9,6 +9,14 @@ public enum PluginEnum {
 
 	private String name;
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	private PluginEnum(String name) {
 		this.name = name;
 	}

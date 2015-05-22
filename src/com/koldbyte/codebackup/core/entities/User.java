@@ -8,6 +8,12 @@ public abstract class User {
 		super();
 	}
 
+	public User(String handle) {
+		super();
+		this.handle = handle;
+		this.profileUrl = getProfileUrlFromHandle();
+	}
+
 	public User(String handle, String profileUrl) {
 		super();
 		this.handle = handle;
@@ -43,4 +49,6 @@ public abstract class User {
 	public abstract String getHandleFromProfileUrl();
 
 	public abstract String getProfileUrlFromHandle();
+
+	public abstract Boolean isValidUser();
 }

@@ -25,6 +25,14 @@ public class SpojUser extends User {
 		this.pass = pass;
 	}
 
+	public SpojUser(String handle) {
+		super(handle);
+	}
+
+	public SpojUser(String handle, String profileUrl) {
+		super(handle, profileUrl);
+	}
+
 	@Override
 	public String getHandleFromProfileUrl() {
 		String handle = profileUrl;
@@ -39,8 +47,10 @@ public class SpojUser extends User {
 		return HTTP + PROFILEURL.replace(":u", this.handle);
 	}
 
-	public SpojUser(String handle, String profileUrl) {
-		super(handle, profileUrl);
+	@Override
+	public Boolean isValidUser() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -28,6 +28,13 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.koldbyte.codebackup.core.entities.User;
+import com.koldbyte.codebackup.core.tools.PluginRunnable;
+import com.koldbyte.codebackup.plugins.PluginEnum;
+import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
+import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
+import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
+
 public class MainWindow {
 
 	private JFrame frmCodeback;
@@ -36,6 +43,8 @@ public class MainWindow {
 	private JTextField handleSpoj;
 	private JTextField passSpoj;
 	private JTextField txtDir;
+	private ImageIcon progress;
+	private ImageIcon tick;
 
 	/**
 	 * Launch the application.
@@ -117,6 +126,9 @@ public class MainWindow {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		progress = new ImageIcon(this.getClass().getResource("/progress.gif"));
+		tick = new ImageIcon(this.getClass().getResource("/tick.gif"));
+
 		frmCodeback = new JFrame();
 		frmCodeback.setTitle("CodeBack");
 		frmCodeback.setBounds(100, 100, 284, 519);
@@ -210,15 +222,16 @@ public class MainWindow {
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_3.setToolTipText("Status");
-		panel_3.setBounds(10, 365, 248, 105);
-		frmCodeback.getContentPane().add(panel_3);
+		JPanel panelStatus = new JPanel();
+		panelStatus
+				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelStatus.setToolTipText("Status");
+		panelStatus.setBounds(10, 365, 248, 105);
+		frmCodeback.getContentPane().add(panelStatus);
 
-		JLabel label_2 = new JLabel("Directory");
-		label_2.setBounds(10, 273, 60, 14);
-		frmCodeback.getContentPane().add(label_2);
+		JLabel lblDirectory = new JLabel("Directory");
+		lblDirectory.setBounds(10, 273, 60, 14);
+		frmCodeback.getContentPane().add(lblDirectory);
 
 		txtDir = new JTextField();
 		txtDir.setEditable(false);
@@ -231,9 +244,10 @@ public class MainWindow {
 		btnDirectory.setBounds(219, 269, 39, 23);
 		frmCodeback.getContentPane().add(btnDirectory);
 
-		JButton button_1 = new JButton("Run");
-		button_1.setBounds(10, 301, 248, 23);
-		frmCodeback.getContentPane().add(button_1);
+		JButton btnRun = new JButton("Run");
+
+		btnRun.setBounds(10, 301, 248, 23);
+		frmCodeback.getContentPane().add(btnRun);
 
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
@@ -299,6 +313,101 @@ public class MainWindow {
 					txtDir.setText(yourFolder.getAbsolutePath());
 					System.out.println("Selected Directory :- "
 							+ yourFolder.toPath());
+				}
+			}
+		});
+
+		btnRun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Boolean codechefStatus = chckbxCodechef.isSelected();
+				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
+				Boolean spojStatus = chckbxSpoj.isSelected();
+				String msg = "";
+				String succesMsg = "";
+				String dir = txtDir.getText();
+				if (dir == null || dir.isEmpty()) {
+					msg += "Please provide a output Directory.\n";
+				} else {
+					/*
+					 * Check for codechef
+					 */
+					if (codechefStatus) {
+						String codechefHandle = handleCodechef.getText();
+						if (codechefHandle == null || codechefHandle.isEmpty()) {
+							msg += "Please provide a Codechef handle.\n";
+						} else {
+							User user = new CodechefUser(codechefHandle);
+							if (!user.isValidUser()) {
+								msg += "Provided Codechef handle is invalid.\n";
+							} else {
+								PluginRunnable runnable = new PluginRunnable(
+										dir, user, PluginEnum.CODECHEF);
+								progressCodechef.setIcon(progress);
+								progressCodechef.setVisible(true);
+								// Run in the new Thread
+								// TODO:
+								progressCodechef.setIcon(tick);
+							}
+						}
+					}
+					/*
+					 * Check for Codeforces
+					 */
+					if (codeforcesStatus) {
+						String codeforceHandle = handleCodeforces.getText();
+						if (codeforceHandle == null
+								|| codeforceHandle.isEmpty()) {
+							msg += "Please provide a Codeforces handle.\n";
+						} else {
+							User user = new CodeforcesUser(codeforceHandle);
+							if (!user.isValidUser()) {
+								msg += "Provided Codeforces handle is invalid.\n";
+							} else {
+								PluginRunnable runnable = new PluginRunnable(
+										dir, user, PluginEnum.CODEFORCES);
+								progressCodeforces.setIcon(progress);
+								progressCodeforces.setVisible(true);
+								// Run in the new Thread
+								// TODO:
+								progressCodeforces.setIcon(tick);
+							}
+						}
+					}
+
+					/*
+					 * Check for Spoj
+					 */
+					if (spojStatus) {
+						String spojHandle = handleCodeforces.getText();
+						String spojPass = passSpoj.getText();
+						if (spojHandle == null || spojHandle.isEmpty()) {
+							msg += "Please provide a Spoj handle.\n";
+						} else if (spojPass == null || spojPass.isEmpty()) {
+							msg += "Please provide pass for the Spoj handle.\n";
+						} else {
+							User user = new SpojUser(spojHandle);
+							((SpojUser) user).setPass(spojPass);
+							if (!user.isValidUser()) {
+								msg += "Provided Codeforces handle is invalid.\n";
+							} else {
+								PluginRunnable runnable = new PluginRunnable(
+										dir, user, PluginEnum.SPOJ);
+								progressSpoj.setIcon(progress);
+								progressSpoj.setVisible(true);
+								// Run in the new Thread
+								// TODO:
+								progressSpoj.setIcon(tick);
+							}
+						}
+					}
+				}
+				if (!msg.isEmpty()) {
+					JOptionPane.showMessageDialog(frmCodeback, msg, "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				if (!succesMsg.isEmpty()) {
+					JOptionPane.showMessageDialog(frmCodeback, succesMsg,
+							"Success", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});

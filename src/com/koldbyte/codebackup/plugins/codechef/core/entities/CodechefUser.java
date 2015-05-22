@@ -6,6 +6,10 @@ public class CodechefUser extends User {
 	private final String HTTP = "http://";
 	private final String PROFILEURLPREFIX = "www.codechef.com/users/";
 
+	public CodechefUser(String handle) {
+		super(handle);
+	}
+
 	public CodechefUser(String handle, String profileUrl) {
 		super(handle, profileUrl);
 	}
@@ -21,5 +25,11 @@ public class CodechefUser extends User {
 		url = url.replace(HTTP, "");
 		url = url.replace(PROFILEURLPREFIX, "");
 		return url;
+	}
+
+	@Override
+	public Boolean isValidUser() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -6,6 +6,14 @@ public class CodeforcesUser extends User {
 	private final String HTTP = "http://";
 	private final String PROFILEURLPREFIX = "codeforces.com/profile/";
 
+	public CodeforcesUser(String handle) {
+		super(handle);
+	}
+
+	public CodeforcesUser(String handle, String profileUrl) {
+		super(handle, profileUrl);
+	}
+
 	@Override
 	public String getHandleFromProfileUrl() {
 		String handle = profileUrl;
@@ -19,8 +27,10 @@ public class CodeforcesUser extends User {
 		return HTTP + PROFILEURLPREFIX + this.handle;
 	}
 
-	public CodeforcesUser(String handle, String profileUrl) {
-		super(handle, profileUrl);
+	@Override
+	public Boolean isValidUser() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
