@@ -8,15 +8,15 @@ public class CodeforcesUser extends User {
 
 	@Override
 	public String getHandleFromProfileUrl() {
-		return HTTP + PROFILEURLPREFIX + this.handle;
+		String handle = profileUrl;
+		handle = handle.replace(HTTP, "");
+		handle = handle.replace(PROFILEURLPREFIX, "");
+		return handle;
 	}
 
 	@Override
 	public String getProfileUrlFromHandle() {
-		String url = profileUrl;
-		url = url.replace(HTTP, "");
-		url = url.replace(PROFILEURLPREFIX, "");
-		return url;
+		return HTTP + PROFILEURLPREFIX + this.handle;
 	}
 
 	public CodeforcesUser(String handle, String profileUrl) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Entities.EscapeMode;
 import org.jsoup.select.Elements;
 
 import com.koldbyte.codebackup.core.entities.Problem;
@@ -16,7 +17,6 @@ public class CodeforcesProblem extends Problem {
 	private final String HTTP = "http://";
 	private final String PROBLEMURL = "codeforces.com/contest/:c/problem/:p";
 
-	
 	@Override
 	public String fetchProblemStatement() {
 
@@ -31,8 +31,12 @@ public class CodeforcesProblem extends Problem {
 
 		// fetch the page containing the problem statement
 		Document doc;
+		String url = getUrl();
 		try {
-			doc = Jsoup.connect("http://example.com/").get();
+			doc = Jsoup.connect(url).get();
+
+			// remove html entities from the code
+			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Elements problems = doc.getElementsByClass("problemindexholder");
 			this.setProblemStatement(problems.html());
@@ -51,10 +55,12 @@ public class CodeforcesProblem extends Problem {
 			String problemUrl = PROBLEMURL;
 
 			// replace ":c" with the contest id(like
-			problemUrl.replace(":c", id[0]);
+			problemUrl = problemUrl.replace(":c", id[0]);
 
 			// replace ":p" with the problem id (like A,B,C etc)
-			url = HTTP + PROBLEMURL + problemId;
+			problemUrl = problemUrl.replace(":p", id[1]);
+
+			url = HTTP + PROBLEMURL;
 			this.setUrl(url);
 		}
 		return url;
@@ -68,12 +74,15 @@ public class CodeforcesProblem extends Problem {
 			u = u.replace("/problem/", "-");
 			this.setProblemId(u);
 		}
-		return super.getProblemId();
+		return this.problemId;
 	}
 
 	public CodeforcesProblem(String problemId, String url) {
 		super(problemId, url);
-		
+	}
+
+	public CodeforcesProblem(String url) {
+		super(url);
 	}
 
 }

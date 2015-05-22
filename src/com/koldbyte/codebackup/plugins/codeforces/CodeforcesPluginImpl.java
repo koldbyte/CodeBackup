@@ -31,7 +31,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 		try {
 			StringBuffer response = request.sendGet();
 			JSONParser parser = new JSONParser();
-			JSONObject responseObject = (JSONObject) parser.parse(response.toString());
+			JSONObject responseObject = (JSONObject) parser.parse(response
+					.toString());
 			JSONArray submissions = (JSONArray) responseObject.get("result");
 			Map<String, Boolean> problemsDone = new HashMap<String, Boolean>();
 			for (Object o : submissions) {
@@ -42,7 +43,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 					JSONObject prob = (JSONObject) submission.get("problem");
 					Long contestId = (Long) prob.get("contestId");
 
-					String problemId = contestId.toString() + "-" + (String) prob.get("index");
+					String problemId = contestId.toString() + "-"
+							+ (String) prob.get("index");
 					if (!problemsDone.containsKey(problemId)) {
 						Problem problem = new CodeforcesProblem(problemId, "");
 
@@ -51,20 +53,24 @@ public class CodeforcesPluginImpl implements PluginInterface {
 
 						String submissionUrl;
 						if (contestId.toString().length() > 3) {
-							submissionUrl = GYMSUBMISSIONURL.replace(":c", contestId.toString()).replace(":s",
+							submissionUrl = GYMSUBMISSIONURL.replace(":c",
+									contestId.toString()).replace(":s",
 									submissionId);
 						} else {
-							submissionUrl = SUBMISSIONURL.replace(":c", contestId.toString()).replace(":s",
+							submissionUrl = SUBMISSIONURL.replace(":c",
+									contestId.toString()).replace(":s",
 									submissionId);
 						}
 						System.out.println("URL -> " + submissionUrl);
-						String time = ((Long) submission.get("creationTimeSeconds")).toString();
+						String time = ((Long) submission
+								.get("creationTimeSeconds")).toString();
 
 						// TODO: fix language for submission- codeforces
 						// String lang = (String)
 						// submission.get("programmingLanguage");
 
-						Submission theSubmission = new CodeforcesSubmission(submissionId, submissionUrl, problem, user);
+						Submission theSubmission = new CodeforcesSubmission(
+								submissionId, submissionUrl, problem, user);
 						theSubmission.setTimestamp(time);
 						list.add(theSubmission);
 						problemsDone.put(problemId, true);
