@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -29,6 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.koldbyte.codebackup.core.entities.User;
+import com.koldbyte.codebackup.core.tools.Logger;
 import com.koldbyte.codebackup.core.tools.PluginRunnable;
 import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
@@ -44,7 +46,6 @@ public class MainWindow {
 	private JTextField passSpoj;
 	private JTextField txtDir;
 	private ImageIcon progress;
-	private ImageIcon tick;
 
 	/**
 	 * Launch the application.
@@ -127,9 +128,10 @@ public class MainWindow {
 			e1.printStackTrace();
 		}
 		progress = new ImageIcon(this.getClass().getResource("/progress.gif"));
-		tick = new ImageIcon(this.getClass().getResource("/tick.gif"));
 
 		frmCodeback = new JFrame();
+		frmCodeback.setType(Type.UTILITY);
+		frmCodeback.setResizable(false);
 		frmCodeback.setTitle("CodeBack");
 		frmCodeback.setBounds(100, 100, 284, 519);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -160,11 +162,11 @@ public class MainWindow {
 		panelCodechef.setVisible(false);
 
 		JLabel lblHandle = new JLabel("Handle");
-		lblHandle.setBounds(10, 11, 46, 14);
+		lblHandle.setBounds(10, 11, 74, 14);
 		panelCodechef.add(lblHandle);
 
 		handleCodechef = new JTextField();
-		handleCodechef.setBounds(66, 8, 171, 20);
+		handleCodechef.setBounds(102, 8, 135, 20);
 		panelCodechef.add(handleCodechef);
 		handleCodechef.setColumns(10);
 
@@ -183,12 +185,12 @@ public class MainWindow {
 		panelCodeforces.setVisible(false);
 
 		JLabel label = new JLabel("Handle");
-		label.setBounds(10, 11, 46, 14);
+		label.setBounds(10, 11, 77, 14);
 		panelCodeforces.add(label);
 
 		handleCodeforces = new JTextField();
 		handleCodeforces.setColumns(10);
-		handleCodeforces.setBounds(66, 8, 171, 20);
+		handleCodeforces.setBounds(107, 8, 135, 20);
 		panelCodeforces.add(handleCodeforces);
 
 		JCheckBox chckbxSpoj = new JCheckBox("Spoj");
@@ -222,13 +224,16 @@ public class MainWindow {
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 
-		JPanel panelStatus = new JPanel();
-		panelStatus
+		JLabel statusLabel = new JLabel();
+		statusLabel
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelStatus.setToolTipText("Status");
-		panelStatus.setBounds(10, 365, 248, 105);
-		frmCodeback.getContentPane().add(panelStatus);
+		statusLabel.setToolTipText("Status");
+		statusLabel.setBounds(10, 365, 248, 105);
+		frmCodeback.getContentPane().add(statusLabel);
 
+		//Attach the status Label with the logStatus Singleton
+		new Logger().getInstance().statusLabel = statusLabel;
+		
 		JLabel lblDirectory = new JLabel("Directory");
 		lblDirectory.setBounds(10, 273, 60, 14);
 		frmCodeback.getContentPane().add(lblDirectory);
@@ -319,6 +324,8 @@ public class MainWindow {
 
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Disable the run button for now
+				((JButton) e.getSource()).setEnabled(false);
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
@@ -346,7 +353,7 @@ public class MainWindow {
 								progressCodechef.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								progressCodechef.setIcon(tick);
+								runnable.run();
 							}
 						}
 					}
@@ -369,7 +376,7 @@ public class MainWindow {
 								progressCodeforces.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								progressCodeforces.setIcon(tick);
+								runnable.run();
 							}
 						}
 					}
@@ -396,7 +403,7 @@ public class MainWindow {
 								progressSpoj.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								progressSpoj.setIcon(tick);
+								runnable.run();
 							}
 						}
 					}
@@ -409,6 +416,9 @@ public class MainWindow {
 					JOptionPane.showMessageDialog(frmCodeback, succesMsg,
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 				}
+				
+				//Reenable the run button
+				((JButton) e.getSource()).setEnabled(true);
 			}
 		});
 	}

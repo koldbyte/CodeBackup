@@ -49,8 +49,7 @@ public class SpojUser extends User {
 
 	@Override
 	public Boolean isValidUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 }

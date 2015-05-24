@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
+import com.koldbyte.codebackup.core.tools.Logger;
 import com.koldbyte.codebackup.plugins.PluginInterface;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefProblem;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefSubmission;
@@ -46,8 +47,12 @@ public class CodechefPluginImpl implements PluginInterface {
 					String id = tds.get(0).text();
 					String time = tds.get(1).text();
 					//String lang = tds.get(6).text();
-					String solUrl = tds.get(7).select("a[href]").attr("abs:href");
 					
+					String solUrl = tds.get(7).select("a[href]").attr("abs:href");
+					//TODO: the solUrl is of pattern http://www.codechef.com/viewsolution/2078521
+					//It should be http://www.codechef.com/viewplaintext/2078521
+					solUrl = solUrl.replace("viewsolution", "viewplaintext");
+
 					Submission sub = new CodechefSubmission(id,solUrl,problem,user);
 					//TODO: Fix the code language 
 					//sub.setLanguage(LanguagesEnum.);
@@ -60,6 +65,7 @@ public class CodechefPluginImpl implements PluginInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		new Logger().getInstance().addStatus("codechef: fetched List");
 		return submissions;
 	}
 }

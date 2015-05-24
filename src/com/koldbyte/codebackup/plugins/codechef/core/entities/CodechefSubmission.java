@@ -7,6 +7,7 @@ import org.jsoup.nodes.Entities.EscapeMode;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
+import com.koldbyte.codebackup.core.tools.Logger;
 
 public class CodechefSubmission extends Submission {
 
@@ -29,7 +30,7 @@ public class CodechefSubmission extends Submission {
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 			
 			code = doc.select("pre").text();
-			
+			new Logger().getInstance().addStatus("codechef: fetched code " + submissionId);
 			setCode(code.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

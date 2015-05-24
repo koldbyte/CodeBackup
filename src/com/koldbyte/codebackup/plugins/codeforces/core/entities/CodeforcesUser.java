@@ -29,8 +29,7 @@ public class CodeforcesUser extends User {
 
 	@Override
 	public Boolean isValidUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 }

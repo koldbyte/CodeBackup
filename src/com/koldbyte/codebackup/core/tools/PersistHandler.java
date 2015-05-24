@@ -22,9 +22,13 @@ public class PersistHandler {
 		String fileName = sub.getProblem().getProblemId() + "-"
 				+ sub.getSubmissionId() + ".txt";
 		File file = new File(finalDestination + fileName);
+		//TODO: Add code to handle existing files
+		//Option1: don't overwrite if file exists
+		//Option2: overwrite data
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
 		try (FileWriter writer = new FileWriter(file)) {
+			new Logger().getInstance().addStatus(pluginName + ": saving " + sub.getSubmissionId());
 			writer.write(sub.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();

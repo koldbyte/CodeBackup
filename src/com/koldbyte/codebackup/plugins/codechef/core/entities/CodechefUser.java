@@ -16,20 +16,19 @@ public class CodechefUser extends User {
 
 	@Override
 	public String getHandleFromProfileUrl() {
-		return HTTP + PROFILEURLPREFIX + this.handle;
+		String handle = profileUrl;
+		handle = handle.replace(HTTP, "");
+		handle = handle.replace(PROFILEURLPREFIX, "");
+		return handle;
 	}
 
 	@Override
 	public String getProfileUrlFromHandle() {
-		String url = profileUrl;
-		url = url.replace(HTTP, "");
-		url = url.replace(PROFILEURLPREFIX, "");
-		return url;
+		return HTTP + PROFILEURLPREFIX + this.handle;
 	}
 
 	@Override
 	public Boolean isValidUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 }

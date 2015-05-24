@@ -2,6 +2,9 @@ package com.koldbyte.codebackup.core.tools;
 
 import java.util.List;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
 import com.koldbyte.codebackup.plugins.PluginEnum;
@@ -18,13 +21,15 @@ public class PluginRunnable implements Runnable {
 	private User user;
 	private PluginEnum pluginEnum;
 	private String dir;
+	public JLabel progressIcon;
+	private ImageIcon tick;
 
 	public PluginRunnable(String dir, User user, PluginEnum pluginEnum) {
 		super();
 		this.dir = dir;
 		this.user = user;
 		this.pluginEnum = pluginEnum;
-
+		tick = new ImageIcon(this.getClass().getResource("/tick.png"));
 	}
 
 	public String getDir() {
@@ -55,15 +60,29 @@ public class PluginRunnable implements Runnable {
 		this.pluginEnum = pluginEnum;
 	}
 
+	public JLabel getProgressIcon() {
+		return progressIcon;
+	}
+
+	public void setProgressIcon(JLabel progressIcon) {
+		this.progressIcon = progressIcon;
+	}
+
 	@Override
 	public void run() {
 		PluginInterface plugin = pluginEnum.getPlugin();
 		if (user != null) {
+			new Logger().getInstance().addStatus("Started " + pluginEnum.name());
 			List<Submission> subs = plugin.getSolvedList(user);
 			for (Submission sub : subs) {
 				sub.fetchSubmittedCode();
 				PersistHandler.save(pluginEnum.getName(), dir, sub);
 			}
+			// Mark the status of the Plugin as finished successfully
+			if (progressIcon != null) {
+				progressIcon.setIcon(tick);
+			}
+			new Logger().getInstance().addStatus("Finished " + pluginEnum.name());
 		}
 	}
 }

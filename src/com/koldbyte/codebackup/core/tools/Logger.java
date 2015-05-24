@@ -1,12 +1,11 @@
 package com.koldbyte.codebackup.core.tools;
 
-public class Logger {
-	
-	private Logger m_instance = null;
+import javax.swing.JLabel;
 
-	private Logger() {
-		super();
-	}
+public class Logger {
+	private Logger m_instance = null;
+	public JLabel statusLabel;
+	private String status;
 
 	public Logger getInstance() {
 		if (m_instance == null) {
@@ -14,9 +13,18 @@ public class Logger {
 		}
 		return m_instance;
 	}
-	
-	public void LogPlugin(String msg){
-		
+
+	public String getStatus() {
+		return status;
 	}
 
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public synchronized void addStatus(String msg) {
+		status += msg + "\n";
+		if (statusLabel != null)
+			statusLabel.setText(status);
+	}
 }
