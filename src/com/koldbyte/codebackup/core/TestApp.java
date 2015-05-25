@@ -41,7 +41,7 @@ public class TestApp {
 		 */
 
 		// test8(); //passed //test fetch of problem Statement SPoj
-		test9(); // //test fetch list of submissions - spoj
+		//test9(); // //test fetch list of submissions - spoj
 		// test10(); // passed //test fetch of code - Spoj
 	}
 

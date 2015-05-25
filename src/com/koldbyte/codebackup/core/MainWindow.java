@@ -38,6 +38,11 @@ import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
 import javax.swing.JPasswordField;
 
+/*
+ * Author : Koldbyte
+ * Version : v1
+ * Date : 25 May 2015
+ */
 public class MainWindow {
 
 	private JFrame frmCodeback;
