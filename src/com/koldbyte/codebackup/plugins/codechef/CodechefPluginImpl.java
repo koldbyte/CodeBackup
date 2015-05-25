@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.koldbyte.codebackup.core.entities.LanguagesEnum;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
@@ -45,7 +46,7 @@ public class CodechefPluginImpl implements PluginInterface {
 					Elements tds = tr.getElementsByTag("td");
 					String id = tds.get(0).text();
 					String time = tds.get(1).text();
-					// String lang = tds.get(6).text();
+					String lang = tds.get(6).text();
 
 					String solUrl = tds.get(7).select("a[href]")
 							.attr("abs:href");
@@ -58,7 +59,7 @@ public class CodechefPluginImpl implements PluginInterface {
 					Submission sub = new CodechefSubmission(id, solUrl,
 							problem, user);
 					// TODO: Fix the code language
-					// sub.setLanguage(LanguagesEnum.);
+					sub.setLanguage(LanguagesEnum.findExtension(lang));
 					sub.setTimestamp(time);
 					submissions.add(sub);
 				}

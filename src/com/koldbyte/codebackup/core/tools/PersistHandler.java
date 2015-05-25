@@ -21,14 +21,14 @@ public class PersistHandler {
 		String finalDestination = dir + sep + sub.getUser().getHandle() + sep
 				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
 		String fileName = sub.getProblem().getProblemId() + "-"
-				+ sub.getSubmissionId() + ".txt";
+				+ sub.getSubmissionId() + "."
+				+ sub.getLanguage().getExtension();
 		// TODO: Handle file name extensions for code
-
 		File file = new File(finalDestination + fileName);
 
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
-		if (!AppConfig.overWrite && file.exists()) {
+		if (!AppConfig.overWrite && file.exists() && file.length() != 0) {
 			// skip this file
 			System.out.println(pluginName + ": skipped overwriting code "
 					+ sub.getSubmissionId());
@@ -55,12 +55,13 @@ public class PersistHandler {
 		// TODO: Allow user to specify custom format for the final destination
 		String finalDestination = dir + sep + sub.getUser().getHandle() + sep
 				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
-		String fileName = sub.getProblem().getProblemId() + "- Statement.txt";
+		String fileName = sub.getProblem().getProblemId() + "- Statement.html";
 		File file = new File(finalDestination + fileName);
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
-		if (!AppConfig.overWrite && file.exists()) {
+		if (!AppConfig.overWrite && file.exists() && file.length() != 0) {
 			// skip this file
+			// Will not skip if the file size is 0
 			System.out.println(pluginName + ": skipped overwriting statement "
 					+ sub.getProblem().getProblemId());
 		} else {

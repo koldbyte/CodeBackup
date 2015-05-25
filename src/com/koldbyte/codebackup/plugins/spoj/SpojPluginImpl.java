@@ -8,6 +8,7 @@ import java.util.Map;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import com.koldbyte.codebackup.core.entities.LanguagesEnum;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
@@ -48,11 +49,13 @@ public class SpojPluginImpl implements PluginInterface {
 							String sId = subEntry[1].trim();
 							Problem p = new SpojProblem(problem, "");
 							// TODO: fix language setting for spoj
-							// String lang = subEntry[7].trim();
+							String lang = subEntry[7].trim();
 							String time = subEntry[2].trim();
 							Submission submission = new SpojSubmission(sId, "",
 									p, user);
 							submission.setTimestamp(time);
+							submission.setLanguage(LanguagesEnum
+									.findExtension(lang));
 							subs.add(submission);
 							problemsDone.put(problem, true);
 						}

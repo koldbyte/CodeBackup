@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.koldbyte.codebackup.core.entities.LanguagesEnum;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
@@ -66,12 +67,14 @@ public class CodeforcesPluginImpl implements PluginInterface {
 								.get("creationTimeSeconds")).toString();
 
 						// TODO: fix language for submission- codeforces
-						// String lang = (String)
-						// submission.get("programmingLanguage");
+						String lang = (String) submission
+								.get("programmingLanguage");
 
 						Submission theSubmission = new CodeforcesSubmission(
 								submissionId, submissionUrl, problem, user);
 						theSubmission.setTimestamp(time);
+						theSubmission.setLanguage(LanguagesEnum
+								.findExtension(lang));
 						list.add(theSubmission);
 						problemsDone.put(problemId, true);
 					}
@@ -85,5 +88,4 @@ public class CodeforcesPluginImpl implements PluginInterface {
 		System.out.println("codeforces: fetched List " + list.size());
 		return list;
 	}
-
 }
