@@ -1,5 +1,6 @@
 package com.koldbyte.codebackup.core;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -21,6 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -30,8 +33,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.koldbyte.codebackup.core.entities.User;
-import com.koldbyte.codebackup.core.tools.Logger;
-import com.koldbyte.codebackup.core.tools.PluginRunnable;
+import com.koldbyte.codebackup.core.tools.MessageConsole;
+import com.koldbyte.codebackup.core.tools.PluginWorker;
 import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
@@ -224,16 +227,31 @@ public class MainWindow {
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 
-		JLabel statusLabel = new JLabel();
-		statusLabel
-				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		statusLabel.setToolTipText("Status");
-		statusLabel.setBounds(10, 365, 248, 105);
-		frmCodeback.getContentPane().add(statusLabel);
+		JPanel statusPanel = new JPanel();
+		statusPanel.setToolTipText("Status");
+		statusPanel.setBounds(10, 365, 248, 105);
+		frmCodeback.getContentPane().add(statusPanel);
 
-		//Attach the status Label with the logStatus Singleton
-		new Logger().getInstance().statusLabel = statusLabel;
-		
+		final JTextArea statusLabel = new JTextArea();
+		statusLabel.setLineWrap(true);
+		statusLabel.setRows(6);
+		statusLabel.setColumns(28);
+		statusPanel.add(statusLabel);
+
+		statusPanel.add(new JScrollPane(statusLabel,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+
+		MessageConsole mc = new MessageConsole(statusLabel);
+		mc.redirectOut();
+		mc.redirectErr(Color.RED, null);
+		// mc.redirectOut(null, System.out);
+
+		/*
+		 * //Attach the status Label with the logStatus Singleton new
+		 * Logger().getInstance().statusLabel = statusLabel;
+		 */
+
 		JLabel lblDirectory = new JLabel("Directory");
 		lblDirectory.setBounds(10, 273, 60, 14);
 		frmCodeback.getContentPane().add(lblDirectory);
@@ -324,7 +342,7 @@ public class MainWindow {
 
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Disable the run button for now
+				// Disable the run button for now
 				((JButton) e.getSource()).setEnabled(false);
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
@@ -347,13 +365,15 @@ public class MainWindow {
 							if (!user.isValidUser()) {
 								msg += "Provided Codechef handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.CODECHEF);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.CODECHEF,
+										progressCodechef);
 								progressCodechef.setIcon(progress);
 								progressCodechef.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								runnable.run();
+								runnable.execute();
+								// runnable.run();
 							}
 						}
 					}
@@ -370,13 +390,15 @@ public class MainWindow {
 							if (!user.isValidUser()) {
 								msg += "Provided Codeforces handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.CODEFORCES);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.CODEFORCES,
+										progressCodeforces);
 								progressCodeforces.setIcon(progress);
 								progressCodeforces.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								runnable.run();
+								runnable.execute();
+								// runnable.run();
 							}
 						}
 					}
@@ -397,13 +419,14 @@ public class MainWindow {
 							if (!user.isValidUser()) {
 								msg += "Provided Codeforces handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.SPOJ);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.SPOJ, progressSpoj);
 								progressSpoj.setIcon(progress);
 								progressSpoj.setVisible(true);
 								// Run in the new Thread
 								// TODO:
-								runnable.run();
+								runnable.execute();
+								// runnable.run();
 							}
 						}
 					}
@@ -416,8 +439,8 @@ public class MainWindow {
 					JOptionPane.showMessageDialog(frmCodeback, succesMsg,
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 				}
-				
-				//Reenable the run button
+
+				// Reenable the run button
 				((JButton) e.getSource()).setEnabled(true);
 			}
 		});

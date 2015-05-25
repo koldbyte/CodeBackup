@@ -12,7 +12,6 @@ import org.json.simple.parser.JSONParser;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
-import com.koldbyte.codebackup.core.tools.Logger;
 import com.koldbyte.codebackup.plugins.PluginInterface;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesProblem;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesSubmission;
@@ -83,7 +82,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		new Logger().getInstance().addStatus("codeforces: fetched List");
+		System.out.println("codeforces: fetched List " + list.size());
+		// new Logger().getInstance().addStatus("codeforces: fetched List");
 		return list;
 	}
 

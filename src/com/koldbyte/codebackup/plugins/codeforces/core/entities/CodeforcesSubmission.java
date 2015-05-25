@@ -29,8 +29,8 @@ public class CodeforcesSubmission extends Submission {
 
 			Elements elem = doc.select("pre.program-source");
 			String code = elem.text();
+			System.out.println("codeforces: fetched code " + submissionId);
 			setCode(code);
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,7 +41,8 @@ public class CodeforcesSubmission extends Submission {
 
 	@Override
 	public String getSubmissionIdFromUrl() {
-		String submissionId = submissionUrl.substring(11 + submissionUrl.indexOf("submission/", 0));
+		String submissionId = submissionUrl.substring(11 + submissionUrl
+				.indexOf("submission/", 0));
 		return submissionId;
 	}
 
@@ -50,14 +51,18 @@ public class CodeforcesSubmission extends Submission {
 		String contestId = problem.getProblemId();
 		String submissionUrl;
 		if (contestId.length() > 3) {
-			submissionUrl = GYMSUBMISSIONURL.replace(":c", contestId.toString()).replace(":s", submissionId);
+			submissionUrl = GYMSUBMISSIONURL
+					.replace(":c", contestId.toString()).replace(":s",
+							submissionId);
 		} else {
-			submissionUrl = SUBMISSIONURL.replace(":c", contestId.toString()).replace(":s", submissionId);
+			submissionUrl = SUBMISSIONURL.replace(":c", contestId.toString())
+					.replace(":s", submissionId);
 		}
 		return submissionUrl;
 	}
 
-	public CodeforcesSubmission(String submissionId, String submissionUrl, Problem problem, User user) {
+	public CodeforcesSubmission(String submissionId, String submissionUrl,
+			Problem problem, User user) {
 		super(submissionId, submissionUrl, problem, user);
 	}
 

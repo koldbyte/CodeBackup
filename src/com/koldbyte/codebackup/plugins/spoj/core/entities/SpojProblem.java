@@ -32,6 +32,7 @@ public class SpojProblem extends Problem {
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Element problemBody = doc.getElementById("problem-body");
+			System.out.println("spoj: fetched problem " + problemId);
 			this.setProblemStatement(problemBody.html());
 
 		} catch (IOException e) {

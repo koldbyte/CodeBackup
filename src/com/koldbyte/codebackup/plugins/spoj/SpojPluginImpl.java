@@ -64,7 +64,7 @@ public class SpojPluginImpl implements PluginInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		System.out.println("spoj: fetched List " + subs.size());
 		return subs;
 	}
 }

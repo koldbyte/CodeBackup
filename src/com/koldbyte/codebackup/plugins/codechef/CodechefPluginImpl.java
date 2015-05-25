@@ -12,7 +12,6 @@ import org.jsoup.select.Elements;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
-import com.koldbyte.codebackup.core.tools.Logger;
 import com.koldbyte.codebackup.plugins.PluginInterface;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefProblem;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefSubmission;
@@ -35,27 +34,31 @@ public class CodechefPluginImpl implements PluginInterface {
 				String linkurl = link.attr("abs:href");
 				if (linkurl.contains("status")) {
 					String problemId = link.text();
-					Problem problem = new CodechefProblem(problemId,"");
+					Problem problem = new CodechefProblem(problemId, "");
 					// if it is a proper "status" page
 					// fetch this page
 					Document page = Jsoup.connect(linkurl).get();
-					
-					//TODO: extend app to process more than one submission
-					//Currently let us fetch only the first submission
+
+					// TODO: extend app to process more than one submission
+					// Currently let us fetch only the first submission
 					Element tr = page.select(".kol").get(0);
 					Elements tds = tr.getElementsByTag("td");
 					String id = tds.get(0).text();
 					String time = tds.get(1).text();
-					//String lang = tds.get(6).text();
-					
-					String solUrl = tds.get(7).select("a[href]").attr("abs:href");
-					//TODO: the solUrl is of pattern http://www.codechef.com/viewsolution/2078521
-					//It should be http://www.codechef.com/viewplaintext/2078521
+					// String lang = tds.get(6).text();
+
+					String solUrl = tds.get(7).select("a[href]")
+							.attr("abs:href");
+					// TODO: the solUrl is of pattern
+					// http://www.codechef.com/viewsolution/2078521
+					// It should be
+					// http://www.codechef.com/viewplaintext/2078521
 					solUrl = solUrl.replace("viewsolution", "viewplaintext");
 
-					Submission sub = new CodechefSubmission(id,solUrl,problem,user);
-					//TODO: Fix the code language 
-					//sub.setLanguage(LanguagesEnum.);
+					Submission sub = new CodechefSubmission(id, solUrl,
+							problem, user);
+					// TODO: Fix the code language
+					// sub.setLanguage(LanguagesEnum.);
 					sub.setTimestamp(time);
 					submissions.add(sub);
 				}
@@ -65,7 +68,8 @@ public class CodechefPluginImpl implements PluginInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		new Logger().getInstance().addStatus("codechef: fetched List");
+		System.out.println("codechef: fetched List " + submissions.size());
+		// new Logger().getInstance().addStatus("codechef: fetched List");
 		return submissions;
 	}
 }

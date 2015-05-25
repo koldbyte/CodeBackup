@@ -38,10 +38,12 @@ public class SpojSubmission extends Submission {
 			String code = Jsoup.connect(url).ignoreContentType(true)
 					.cookies(loginForm.cookies()).method(Connection.Method.GET)
 					.execute().body();
-			if(code.isEmpty()){
-				System.out.println("Error! Invalid Spoj Credentials");
+			if (code.isEmpty()) {
+				System.err.println("Error! Invalid Spoj Credentials");
+			} else {
+				System.out.println("spoj: fetched code " + submissionId);
+				setCode(code);
 			}
-			setCode(code);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -39,6 +39,7 @@ public class CodeforcesProblem extends Problem {
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Elements problems = doc.getElementsByClass("problemindexholder");
+			System.out.println("codeforces: fetched problem " + problemId);
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

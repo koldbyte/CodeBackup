@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingWorker;
 
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
@@ -17,19 +18,21 @@ import com.koldbyte.codebackup.plugins.PluginInterface;
  *  
  *  This class will also 
  */
-public class PluginRunnable implements Runnable {
+public class PluginWorker extends SwingWorker<Integer, Integer> {
 	private User user;
 	private PluginEnum pluginEnum;
 	private String dir;
-	public JLabel progressIcon;
 	private ImageIcon tick;
+	private JLabel progressIcon;
 
-	public PluginRunnable(String dir, User user, PluginEnum pluginEnum) {
+	public PluginWorker(String dir, User user, PluginEnum pluginEnum,
+			JLabel progress) {
 		super();
 		this.dir = dir;
 		this.user = user;
 		this.pluginEnum = pluginEnum;
-		tick = new ImageIcon(this.getClass().getResource("/tick.png"));
+		this.tick = new ImageIcon(this.getClass().getResource("/tick.png"));
+		this.progressIcon = progress;
 	}
 
 	public String getDir() {
@@ -40,7 +43,7 @@ public class PluginRunnable implements Runnable {
 		this.dir = dir;
 	}
 
-	public PluginRunnable() {
+	public PluginWorker() {
 		super();
 	}
 
@@ -60,29 +63,29 @@ public class PluginRunnable implements Runnable {
 		this.pluginEnum = pluginEnum;
 	}
 
-	public JLabel getProgressIcon() {
-		return progressIcon;
-	}
-
-	public void setProgressIcon(JLabel progressIcon) {
-		this.progressIcon = progressIcon;
-	}
-
 	@Override
-	public void run() {
+	protected Integer doInBackground() throws Exception {
 		PluginInterface plugin = pluginEnum.getPlugin();
 		if (user != null) {
-			new Logger().getInstance().addStatus("Started " + pluginEnum.name());
+			System.out.println("Started " + pluginEnum.name());
+			// new Logger().getInstance().addStatus("Started " +
+			// pluginEnum.name());
 			List<Submission> subs = plugin.getSolvedList(user);
 			for (Submission sub : subs) {
 				sub.fetchSubmittedCode();
 				PersistHandler.save(pluginEnum.getName(), dir, sub);
 			}
-			// Mark the status of the Plugin as finished successfully
-			if (progressIcon != null) {
-				progressIcon.setIcon(tick);
-			}
-			new Logger().getInstance().addStatus("Finished " + pluginEnum.name());
+
 		}
+		return 0;
+	}
+
+	@Override
+	protected void done() {
+		progressIcon.setIcon(tick);
+		// Mark the status of the Plugin as finished successfully
+		System.out.println("Finished " + pluginEnum.name());
+		new Logger().getInstance().addStatus("Finished " + pluginEnum.name());
+		super.done();
 	}
 }
