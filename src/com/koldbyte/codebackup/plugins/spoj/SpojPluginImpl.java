@@ -64,7 +64,8 @@ public class SpojPluginImpl implements PluginInterface {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("spoj: Error fetching list");
+			System.out.println("codeforces: Found " + subs.size()
+					+ " Submissions");
 			// e.printStackTrace();
 		}
 		System.out.println("spoj: fetched List " + subs.size());

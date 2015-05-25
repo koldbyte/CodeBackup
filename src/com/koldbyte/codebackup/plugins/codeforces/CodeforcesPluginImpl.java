@@ -62,7 +62,7 @@ public class CodeforcesPluginImpl implements PluginInterface {
 									contestId.toString()).replace(":s",
 									submissionId);
 						}
-						//System.out.println("URL -> " + submissionUrl);
+						// System.out.println("URL -> " + submissionUrl);
 						String time = ((Long) submission
 								.get("creationTimeSeconds")).toString();
 
@@ -82,7 +82,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			}
 
 		} catch (Exception e) {
-			System.err.println("codeforces: Error Fetching list");
+			System.out.println("codeforces: Found " + list.size()
+					+ " Submissions");
 			// e.printStackTrace();
 		}
 		System.out.println("codeforces: fetched List " + list.size());
