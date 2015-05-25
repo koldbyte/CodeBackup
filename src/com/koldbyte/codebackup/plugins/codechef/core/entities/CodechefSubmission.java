@@ -30,8 +30,6 @@ public class CodechefSubmission extends Submission {
 
 			code = doc.select("pre").text();
 			System.out.println("codechef: fetched code " + submissionId);
-			// new Logger().getInstance().addStatus("codechef: fetched code " +
-			// submissionId);
 			setCode(code.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

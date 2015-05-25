@@ -83,7 +83,6 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			e.printStackTrace();
 		}
 		System.out.println("codeforces: fetched List " + list.size());
-		// new Logger().getInstance().addStatus("codeforces: fetched List");
 		return list;
 	}
 

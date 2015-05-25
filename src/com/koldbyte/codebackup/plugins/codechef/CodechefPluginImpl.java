@@ -69,7 +69,6 @@ public class CodechefPluginImpl implements PluginInterface {
 			e.printStackTrace();
 		}
 		System.out.println("codechef: fetched List " + submissions.size());
-		// new Logger().getInstance().addStatus("codechef: fetched List");
 		return submissions;
 	}
 }

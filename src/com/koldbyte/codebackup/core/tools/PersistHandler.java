@@ -30,8 +30,6 @@ public class PersistHandler {
 		try (FileWriter writer = new FileWriter(file)) {
 			System.out
 					.println(pluginName + ": saving " + sub.getSubmissionId());
-			// new Logger().getInstance().addStatus(pluginName + ": saving " +
-			// sub.getSubmissionId());
 			writer.write(sub.getCode());
 		} catch (IOException e) {
 			e.printStackTrace();

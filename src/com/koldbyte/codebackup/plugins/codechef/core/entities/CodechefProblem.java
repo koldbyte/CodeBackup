@@ -41,8 +41,6 @@ public class CodechefProblem extends Problem {
 			e.printStackTrace();
 		}
 		System.out.println("codechef: fetched problem " + problemId);
-		// new Logger().getInstance().addStatus(
-		// "codechef: fetched problem " + problemId);
 		return this.problemStatement;
 	}
 

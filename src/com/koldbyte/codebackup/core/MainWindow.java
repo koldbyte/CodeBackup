@@ -247,11 +247,6 @@ public class MainWindow {
 		mc.redirectErr(Color.RED, null);
 		// mc.redirectOut(null, System.out);
 
-		/*
-		 * //Attach the status Label with the logStatus Singleton new
-		 * Logger().getInstance().statusLabel = statusLabel;
-		 */
-
 		JLabel lblDirectory = new JLabel("Directory");
 		lblDirectory.setBounds(10, 273, 60, 14);
 		frmCodeback.getContentPane().add(lblDirectory);

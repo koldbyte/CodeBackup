@@ -68,8 +68,6 @@ public class PluginWorker extends SwingWorker<Integer, Integer> {
 		PluginInterface plugin = pluginEnum.getPlugin();
 		if (user != null) {
 			System.out.println("Started " + pluginEnum.name());
-			// new Logger().getInstance().addStatus("Started " +
-			// pluginEnum.name());
 			List<Submission> subs = plugin.getSolvedList(user);
 			for (Submission sub : subs) {
 				sub.fetchSubmittedCode();
@@ -85,7 +83,6 @@ public class PluginWorker extends SwingWorker<Integer, Integer> {
 		progressIcon.setIcon(tick);
 		// Mark the status of the Plugin as finished successfully
 		System.out.println("Finished " + pluginEnum.name());
-		new Logger().getInstance().addStatus("Finished " + pluginEnum.name());
 		super.done();
 	}
 }
