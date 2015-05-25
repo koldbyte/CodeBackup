@@ -36,8 +36,9 @@ public class SpojProblem extends Problem {
 			this.setProblemStatement(problemBody.html());
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("spoj: Error fetching Problem Statement "
+					+ problemId);
+			// e.printStackTrace();
 		}
 
 		return this.problemStatement;

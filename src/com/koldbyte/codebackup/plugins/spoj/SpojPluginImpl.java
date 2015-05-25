@@ -61,8 +61,8 @@ public class SpojPluginImpl implements PluginInterface {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("spoj: Error fetching list");
+			// e.printStackTrace();
 		}
 		System.out.println("spoj: fetched List " + subs.size());
 		return subs;

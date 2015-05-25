@@ -37,8 +37,8 @@ public class CodechefProblem extends Problem {
 					.getElementsByClass("primary-colum-width-left");
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codechef: Error fetching Problem Statement " + problemId);
+			//e.printStackTrace();
 		}
 		System.out.println("codechef: fetched problem " + problemId);
 		return this.problemStatement;

@@ -79,8 +79,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codeforces: Error Fetching list");
+			// e.printStackTrace();
 		}
 		System.out.println("codeforces: fetched List " + list.size());
 		return list;

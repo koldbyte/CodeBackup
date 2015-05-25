@@ -66,6 +66,7 @@ public class CodechefPluginImpl implements PluginInterface {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.err.println("codechef: Error fetching list.");
 			e.printStackTrace();
 		}
 		System.out.println("codechef: fetched List " + submissions.size());

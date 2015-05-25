@@ -60,7 +60,8 @@ public class MainWindow {
 					window.frmCodeback.setVisible(true);
 
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.err.println("Main: Error starting Application.");
+					// e.printStackTrace();
 				}
 			}
 		});
@@ -295,14 +296,14 @@ public class MainWindow {
 		progressSpoj.setBounds(234, 160, 24, 24);
 		progressSpoj.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressSpoj);
-		
-		JCheckBox chckbxOverwriteIfCode = new JCheckBox("Overwrite if Code Exist");
-		chckbxOverwriteIfCode.setBounds(286, 84, 373, 23);
-		frmCodeback.getContentPane().add(chckbxOverwriteIfCode);
-		
-		JCheckBox chckbxAlsoFetchProblem = new JCheckBox("Also Fetch Problem statements");
-		chckbxAlsoFetchProblem.setBounds(286, 113, 373, 23);
-		frmCodeback.getContentPane().add(chckbxAlsoFetchProblem);
+
+		JCheckBox chkOverwrite = new JCheckBox("Overwrite if Code Exist");
+		chkOverwrite.setBounds(286, 84, 373, 23);
+		frmCodeback.getContentPane().add(chkOverwrite);
+
+		JCheckBox chkProblem = new JCheckBox("Also Fetch Problem statements");
+		chkProblem.setBounds(286, 113, 373, 23);
+		frmCodeback.getContentPane().add(chkProblem);
 		progressSpoj.setVisible(false);
 
 		chckbxCodechef.addChangeListener(new ChangeListener() {
@@ -346,6 +347,11 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				// Disable the run button for now
 				((JButton) e.getSource()).setEnabled(false);
+
+				// Initialize Appconfig
+				AppConfig.setOverWrite(chkOverwrite.isSelected());
+				AppConfig.setFetchProblem(chkProblem.isSelected());
+
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();

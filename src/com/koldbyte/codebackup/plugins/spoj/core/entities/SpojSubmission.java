@@ -45,8 +45,8 @@ public class SpojSubmission extends Submission {
 				setCode(code);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codechef: Error Fetching code" + submissionId);
+			// e.printStackTrace();
 		}
 
 		return code;

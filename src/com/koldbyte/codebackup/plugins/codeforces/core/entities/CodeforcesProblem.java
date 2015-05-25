@@ -42,8 +42,9 @@ public class CodeforcesProblem extends Problem {
 			System.out.println("codeforces: fetched problem " + problemId);
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codeforces: Error fetching Problem Statement "
+					+ problemId);
+			// e.printStackTrace();
 		}
 
 		return this.problemStatement;

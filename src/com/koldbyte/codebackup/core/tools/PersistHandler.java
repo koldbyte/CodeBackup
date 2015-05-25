@@ -32,7 +32,36 @@ public class PersistHandler {
 					.println(pluginName + ": saving " + sub.getSubmissionId());
 			writer.write(sub.getCode());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(pluginName + ": Error saving code "
+					+ sub.getSubmissionId());
+			// e.printStackTrace();
+		}
+	}
+
+	public static void saveProblem(String pluginName, String dir, Submission sub) {
+		/*
+		 * final destination will look like dir / handle / ContestSite /
+		 * problemId / problemId-submissionId.ext
+		 */
+		String sep = File.separator;
+		// TODO: Allow user to specify custom format for the final destination
+		String finalDestination = dir + sep + sub.getUser().getHandle() + sep
+				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
+		String fileName = sub.getProblem().getProblemId() + "- Statement.txt";
+		File file = new File(finalDestination + fileName);
+		// TODO: Add code to handle existing files
+		// Option1: don't overwrite if file exists
+		// Option2: overwrite data
+		// now make sure whole path is created
+		file.getParentFile().mkdirs();
+		try (FileWriter writer = new FileWriter(file)) {
+			System.out
+					.println(pluginName + ": saving " + sub.getSubmissionId());
+			writer.write(sub.getProblem().getProblemStatement());
+		} catch (IOException e) {
+			System.err.println(pluginName + ": Error saving problem statement "
+					+ sub.getProblem().getProblemId());
+			// e.printStackTrace();
 		}
 	}
 }

@@ -32,8 +32,8 @@ public class CodechefSubmission extends Submission {
 			System.out.println("codechef: fetched code " + submissionId);
 			setCode(code.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codechef: Error Fetching code" + submissionId);
+			// e.printStackTrace();
 		}
 
 		return code.toString();
