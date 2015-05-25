@@ -1,15 +1,13 @@
 package com.koldbyte.codebackup.core;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
@@ -22,8 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -71,51 +69,6 @@ public class MainWindow {
 	 */
 	public MainWindow() {
 		initialize();
-	}
-
-	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img
-	 *            The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	public static BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
-		}
-
-		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null),
-				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		// Draw the image on to the buffered image
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-
-		// Return the buffered image
-		return bimage;
-	}
-
-	public static BufferedImage resize(BufferedImage image, int width,
-			int height) {
-		BufferedImage bi = new BufferedImage(width, height,
-				BufferedImage.TRANSLUCENT);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
-		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY));
-		g2d.drawImage(image, 0, 0, width, height, null);
-		g2d.dispose();
-		return bi;
-	}
-
-	public void enableControls() {
-
-	}
-
-	public void disableControls() {
-
 	}
 
 	/**
@@ -229,24 +182,29 @@ public class MainWindow {
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 
-		JPanel statusPanel = new JPanel();
+		JPanel statusPanel = new JPanel(new BorderLayout());
 		statusPanel.setToolTipText("Status");
 		statusPanel.setBounds(10, 274, 649, 124);
 		frmCodeback.getContentPane().add(statusPanel);
 
-		final JTextArea statusLabel = new JTextArea();
+		JTextPane statusLabel = new JTextPane();
+		statusLabel.setBackground(Color.DARK_GRAY);
+		statusLabel.setForeground(Color.BLACK);
+		statusLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
+		statusLabel.setBounds(10, 274, 620, 124);
 		statusLabel.setEditable(false);
-		statusLabel.setLineWrap(true);
-		statusLabel.setRows(6);
-		statusLabel.setColumns(78);
+		statusLabel.setSize(620, 124);
+		// statusLabel.setLineWrap(true);
+		// statusLabel.setRows(6);
+		// statusLabel.setColumns(78);
 		statusPanel.add(statusLabel);
 
 		statusPanel.add(new JScrollPane(statusLabel,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
 		MessageConsole mc = new MessageConsole(statusLabel);
-		mc.redirectOut();
+		mc.redirectOut(Color.GREEN, null);
 		mc.redirectErr(Color.RED, null);
 		// mc.redirectOut(null, System.out);
 

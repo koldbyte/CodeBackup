@@ -1,7 +1,8 @@
 package com.koldbyte.codebackup.core.entities;
 
 public enum LanguagesEnum {
-	C("c"), CPP("cpp"), JAVA("java"), PYTHON("py"), RUBY("rb"), TEXT("txt");
+	C("c"), CPP("cpp"), JAVA("java"), PYTHON("py"), RUBY("rb"), PASCAL("pas"), TEXT(
+			"txt");
 
 	private String extension;
 
@@ -30,6 +31,12 @@ public enum LanguagesEnum {
 		}
 		if (e.contains("ruby")) {
 			return RUBY;
+		}
+		if (e.contains("pascal")) {
+			return PASCAL;
+		}
+		if (e.contains("gcc") || e.contains("c")) {
+			return C;
 		}
 
 		return TEXT;
