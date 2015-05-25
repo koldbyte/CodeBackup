@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -133,10 +132,9 @@ public class MainWindow {
 		progress = new ImageIcon(this.getClass().getResource("/progress.gif"));
 
 		frmCodeback = new JFrame();
-		frmCodeback.setType(Type.UTILITY);
 		frmCodeback.setResizable(false);
 		frmCodeback.setTitle("CodeBack");
-		frmCodeback.setBounds(100, 100, 284, 519);
+		frmCodeback.setBounds(100, 100, 675, 434);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
 		frmCodeback.addWindowListener(new WindowAdapter() {
@@ -153,7 +151,7 @@ public class MainWindow {
 		JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodechef.setBounds(10, 7, 213, 23);
+		chckbxCodechef.setBounds(10, 7, 248, 23);
 		frmCodeback.getContentPane().add(chckbxCodechef);
 
 		JPanel panelCodechef = new JPanel();
@@ -169,14 +167,14 @@ public class MainWindow {
 		panelCodechef.add(lblHandle);
 
 		handleCodechef = new JTextField();
-		handleCodechef.setBounds(102, 8, 135, 20);
+		handleCodechef.setBounds(94, 8, 145, 20);
 		panelCodechef.add(handleCodechef);
 		handleCodechef.setColumns(10);
 
 		JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
 		chckbxCodeforces.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodeforces.setBounds(10, 84, 213, 23);
+		chckbxCodeforces.setBounds(10, 84, 248, 23);
 		frmCodeback.getContentPane().add(chckbxCodeforces);
 
 		JPanel panelCodeforces = new JPanel();
@@ -193,13 +191,13 @@ public class MainWindow {
 
 		handleCodeforces = new JTextField();
 		handleCodeforces.setColumns(10);
-		handleCodeforces.setBounds(107, 8, 135, 20);
+		handleCodeforces.setBounds(94, 8, 145, 20);
 		panelCodeforces.add(handleCodeforces);
 
 		JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxSpoj.setBounds(10, 161, 213, 23);
+		chckbxSpoj.setBounds(10, 161, 248, 23);
 		frmCodeback.getContentPane().add(chckbxSpoj);
 
 		JPanel panelSpoj = new JPanel();
@@ -210,32 +208,33 @@ public class MainWindow {
 		panelSpoj.setVisible(false);
 
 		JLabel label_1 = new JLabel("Handle");
-		label_1.setBounds(10, 11, 46, 14);
+		label_1.setBounds(10, 11, 74, 14);
 		panelSpoj.add(label_1);
 
 		handleSpoj = new JTextField();
 		handleSpoj.setColumns(10);
-		handleSpoj.setBounds(66, 8, 171, 20);
+		handleSpoj.setBounds(94, 8, 145, 20);
 		panelSpoj.add(handleSpoj);
 
 		JLabel lblPass = new JLabel("Pass");
-		lblPass.setBounds(10, 40, 46, 14);
+		lblPass.setBounds(10, 40, 74, 14);
 		panelSpoj.add(lblPass);
 
 		passSpoj = new JTextField();
-		passSpoj.setBounds(66, 39, 171, 20);
+		passSpoj.setBounds(94, 39, 145, 20);
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 
 		JPanel statusPanel = new JPanel();
 		statusPanel.setToolTipText("Status");
-		statusPanel.setBounds(10, 365, 248, 105);
+		statusPanel.setBounds(10, 274, 649, 124);
 		frmCodeback.getContentPane().add(statusPanel);
 
 		final JTextArea statusLabel = new JTextArea();
+		statusLabel.setEditable(false);
 		statusLabel.setLineWrap(true);
 		statusLabel.setRows(6);
-		statusLabel.setColumns(28);
+		statusLabel.setColumns(78);
 		statusPanel.add(statusLabel);
 
 		statusPanel.add(new JScrollPane(statusLabel,
@@ -248,23 +247,23 @@ public class MainWindow {
 		// mc.redirectOut(null, System.out);
 
 		JLabel lblDirectory = new JLabel("Directory");
-		lblDirectory.setBounds(10, 273, 60, 14);
+		lblDirectory.setBounds(286, 15, 373, 14);
 		frmCodeback.getContentPane().add(lblDirectory);
 
 		txtDir = new JTextField();
 		txtDir.setEditable(false);
 		txtDir.setColumns(10);
-		txtDir.setBounds(80, 270, 129, 20);
+		txtDir.setBounds(286, 37, 324, 20);
 		frmCodeback.getContentPane().add(txtDir);
 
 		JButton btnDirectory = new JButton("\u00BB");
 
-		btnDirectory.setBounds(219, 269, 39, 23);
+		btnDirectory.setBounds(620, 36, 39, 23);
 		frmCodeback.getContentPane().add(btnDirectory);
 
 		JButton btnRun = new JButton("Run");
 
-		btnRun.setBounds(10, 301, 248, 23);
+		btnRun.setBounds(339, 220, 123, 23);
 		frmCodeback.getContentPane().add(btnRun);
 
 		JButton btnExit = new JButton("Exit");
@@ -274,7 +273,7 @@ public class MainWindow {
 						WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		btnExit.setBounds(10, 331, 248, 23);
+		btnExit.setBounds(481, 220, 123, 23);
 		frmCodeback.getContentPane().add(btnExit);
 
 		URL url = this.getClass().getResource("/progress.gif");
@@ -296,6 +295,14 @@ public class MainWindow {
 		progressSpoj.setBounds(234, 160, 24, 24);
 		progressSpoj.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressSpoj);
+		
+		JCheckBox chckbxOverwriteIfCode = new JCheckBox("Overwrite if Code Exist");
+		chckbxOverwriteIfCode.setBounds(286, 84, 373, 23);
+		frmCodeback.getContentPane().add(chckbxOverwriteIfCode);
+		
+		JCheckBox chckbxAlsoFetchProblem = new JCheckBox("Also Fetch Problem statements");
+		chckbxAlsoFetchProblem.setBounds(286, 113, 373, 23);
+		frmCodeback.getContentPane().add(chckbxAlsoFetchProblem);
 		progressSpoj.setVisible(false);
 
 		chckbxCodechef.addChangeListener(new ChangeListener() {
