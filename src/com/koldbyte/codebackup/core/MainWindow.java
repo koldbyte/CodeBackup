@@ -58,7 +58,6 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frmCodeback.setVisible(true);
-
 				} catch (Exception e) {
 					System.err.println("Main: Error starting Application.");
 					// e.printStackTrace();
@@ -152,7 +151,7 @@ public class MainWindow {
 		JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodechef.setBounds(10, 7, 248, 23);
+		chckbxCodechef.setBounds(10, 7, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodechef);
 
 		JPanel panelCodechef = new JPanel();
@@ -175,7 +174,7 @@ public class MainWindow {
 		JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
 		chckbxCodeforces.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodeforces.setBounds(10, 84, 248, 23);
+		chckbxCodeforces.setBounds(10, 84, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodeforces);
 
 		JPanel panelCodeforces = new JPanel();
@@ -198,7 +197,7 @@ public class MainWindow {
 		JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxSpoj.setBounds(10, 161, 248, 23);
+		chckbxSpoj.setBounds(10, 161, 218, 23);
 		frmCodeback.getContentPane().add(chckbxSpoj);
 
 		JPanel panelSpoj = new JPanel();

@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
+import com.koldbyte.codebackup.core.AppConfig;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
 import com.koldbyte.codebackup.plugins.PluginEnum;
@@ -72,6 +73,9 @@ public class PluginWorker extends SwingWorker<Integer, Integer> {
 			for (Submission sub : subs) {
 				sub.fetchSubmittedCode();
 				PersistHandler.save(pluginEnum.getName(), dir, sub);
+				if (AppConfig.fetchProblem == true) {
+					PersistHandler.saveProblem(pluginEnum.getName(), dir, sub);
+				}
 			}
 
 		}

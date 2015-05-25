@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.koldbyte.codebackup.core.AppConfig;
 import com.koldbyte.codebackup.core.entities.Submission;
 
 /*
@@ -21,20 +22,27 @@ public class PersistHandler {
 				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
 		String fileName = sub.getProblem().getProblemId() + "-"
 				+ sub.getSubmissionId() + ".txt";
+		// TODO: Handle file name extensions for code
+
 		File file = new File(finalDestination + fileName);
-		// TODO: Add code to handle existing files
-		// Option1: don't overwrite if file exists
-		// Option2: overwrite data
+
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
-		try (FileWriter writer = new FileWriter(file)) {
-			System.out
-					.println(pluginName + ": saving " + sub.getSubmissionId());
-			writer.write(sub.getCode());
-		} catch (IOException e) {
-			System.err.println(pluginName + ": Error saving code "
+		if (!AppConfig.overWrite && file.exists()) {
+			// skip this file
+			System.out.println(pluginName + ": skipped overwriting code "
 					+ sub.getSubmissionId());
-			// e.printStackTrace();
+		} else {
+			// Saved the file
+			try (FileWriter writer = new FileWriter(file)) {
+				System.out.println(pluginName + ": saving code "
+						+ sub.getSubmissionId());
+				writer.write(sub.getCode());
+			} catch (IOException e) {
+				System.err.println(pluginName + ": Error saving code "
+						+ sub.getSubmissionId());
+				// e.printStackTrace();
+			}
 		}
 	}
 
@@ -49,19 +57,23 @@ public class PersistHandler {
 				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
 		String fileName = sub.getProblem().getProblemId() + "- Statement.txt";
 		File file = new File(finalDestination + fileName);
-		// TODO: Add code to handle existing files
-		// Option1: don't overwrite if file exists
-		// Option2: overwrite data
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
-		try (FileWriter writer = new FileWriter(file)) {
-			System.out
-					.println(pluginName + ": saving " + sub.getSubmissionId());
-			writer.write(sub.getProblem().getProblemStatement());
-		} catch (IOException e) {
-			System.err.println(pluginName + ": Error saving problem statement "
+		if (!AppConfig.overWrite && file.exists()) {
+			// skip this file
+			System.out.println(pluginName + ": skipped overwriting statement "
 					+ sub.getProblem().getProblemId());
-			// e.printStackTrace();
+		} else {
+			try (FileWriter writer = new FileWriter(file)) {
+				System.out.println(pluginName + ": saving "
+						+ sub.getSubmissionId());
+				writer.write(sub.getProblem().getProblemStatement());
+			} catch (IOException e) {
+				System.err.println(pluginName
+						+ ": Error saving problem statement "
+						+ sub.getProblem().getProblemId());
+				// e.printStackTrace();
+			}
 		}
 	}
 }
