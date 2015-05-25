@@ -66,7 +66,7 @@ public class PersistHandler {
 					+ sub.getProblem().getProblemId());
 		} else {
 			try (FileWriter writer = new FileWriter(file)) {
-				System.out.println(pluginName + ": saving "
+				System.out.println(pluginName + ": saving problem statement "
 						+ sub.getSubmissionId());
 				writer.write(sub.getProblem().getProblemStatement());
 			} catch (IOException e) {

@@ -36,6 +36,7 @@ import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
+import javax.swing.JPasswordField;
 
 public class MainWindow {
 
@@ -43,7 +44,7 @@ public class MainWindow {
 	private JTextField handleCodechef;
 	private JTextField handleCodeforces;
 	private JTextField handleSpoj;
-	private JTextField passSpoj;
+	private JPasswordField passSpoj;
 	private JTextField txtDir;
 	private ImageIcon progress;
 
@@ -90,7 +91,7 @@ public class MainWindow {
 
 		frmCodeback = new JFrame();
 		frmCodeback.setResizable(false);
-		frmCodeback.setTitle("CodeBack");
+		frmCodeback.setTitle("CodeBack :: By Koldbyte (Bhaskar Divya)");
 		frmCodeback.setBounds(100, 100, 675, 434);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
@@ -177,7 +178,7 @@ public class MainWindow {
 		lblPass.setBounds(10, 40, 74, 14);
 		panelSpoj.add(lblPass);
 
-		passSpoj = new JTextField();
+		passSpoj = new JPasswordField();
 		passSpoj.setBounds(94, 39, 145, 20);
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
@@ -201,7 +202,8 @@ public class MainWindow {
 
 		statusPanel.add(new JScrollPane(statusLabel,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+				BorderLayout.CENTER);
 
 		MessageConsole mc = new MessageConsole(statusLabel);
 		mc.redirectOut(Color.GREEN, null);
@@ -265,6 +267,29 @@ public class MainWindow {
 		JCheckBox chkProblem = new JCheckBox("Also Fetch Problem statements");
 		chkProblem.setBounds(286, 113, 373, 23);
 		frmCodeback.getContentPane().add(chkProblem);
+
+		JButton btnInfo = new JButton("About");
+		btnInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String msg = "CodeBack - Developed by Koldbyte (Bhaskar Divya)\n";
+				msg += "CodeBack is a tool to backup all your code submissions on contest sites - Spoj, Codeforces and Codechef.\n\n";
+				msg += "GITHUB : https://github.com/koldbyte/CodeBackup\n\n";
+				msg += "How to use it?\n\n";
+				msg += "1. Enable the checkboxes for which you want to fetch submissions.\n";
+				msg += "2. Enter your handle(username) registered on the website.\n";
+				msg += "3. Select a directory where you want to save the codes\n";
+				msg += "4, Select other options as required.\n";
+				msg += "5. Hit Run.\n";
+				msg += "\n";
+				msg += "CodeBack will save all the Codes and Problem Statement in following directory format :\n";
+				msg += "(Select Directory) / (Handle) / (ContestSite) / (PROBLEMNAME) / (PROBLEMNAME)-(SUBMISSIONID).(EXT)\n";
+
+				JOptionPane.showMessageDialog(frmCodeback, msg,
+						"About CodeBack", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		btnInfo.setBounds(426, 161, 89, 23);
+		frmCodeback.getContentPane().add(btnInfo);
 		progressSpoj.setVisible(false);
 
 		chckbxCodechef.addChangeListener(new ChangeListener() {
@@ -376,17 +401,18 @@ public class MainWindow {
 					 * Check for Spoj
 					 */
 					if (spojStatus) {
-						String spojHandle = handleCodeforces.getText();
-						String spojPass = passSpoj.getText();
+						String spojHandle = handleSpoj.getText();
+						String spojPass = String.valueOf(passSpoj.getPassword());
 						if (spojHandle == null || spojHandle.isEmpty()) {
 							msg += "Please provide a Spoj handle.\n";
 						} else if (spojPass == null || spojPass.isEmpty()) {
-							msg += "Please provide pass for the Spoj handle.\n";
+							msg += "Please provide password for the Spoj handle.\n";
 						} else {
 							User user = new SpojUser(spojHandle);
+							((SpojUser) user).setUsername(spojHandle);
 							((SpojUser) user).setPass(spojPass);
 							if (!user.isValidUser()) {
-								msg += "Provided Codeforces handle is invalid.\n";
+								msg += "Provided Spoj handle is invalid.\n";
 							} else {
 								PluginWorker runnable = new PluginWorker(dir,
 										user, PluginEnum.SPOJ, progressSpoj);

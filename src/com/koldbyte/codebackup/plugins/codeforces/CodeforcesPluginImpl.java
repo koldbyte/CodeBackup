@@ -62,7 +62,7 @@ public class CodeforcesPluginImpl implements PluginInterface {
 									contestId.toString()).replace(":s",
 									submissionId);
 						}
-						System.out.println("URL -> " + submissionUrl);
+						//System.out.println("URL -> " + submissionUrl);
 						String time = ((Long) submission
 								.get("creationTimeSeconds")).toString();
 

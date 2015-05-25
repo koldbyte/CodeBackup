@@ -60,9 +60,9 @@ public class HTTPRequest {
 		// add request header
 		con.setRequestProperty("User-Agent", userAgent);
 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+		// int responseCode = con.getResponseCode();
+		// System.out.println("\nSending 'GET' request to URL : " + url);
+		// System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
@@ -75,7 +75,7 @@ public class HTTPRequest {
 		in.close();
 
 		// print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
 
 		return response;
 	}
@@ -97,10 +97,10 @@ public class HTTPRequest {
 		wr.flush();
 		wr.close();
 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + urlParameters);
-		System.out.println("Response Code : " + responseCode);
+		// int responseCode = con.getResponseCode();
+		// System.out.println("\nSending 'POST' request to URL : " + url);
+		// System.out.println("Post parameters : " + urlParameters);
+		// System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
@@ -113,7 +113,7 @@ public class HTTPRequest {
 		in.close();
 
 		// print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
 
 		return response;
 	}

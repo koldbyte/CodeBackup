@@ -25,8 +25,8 @@ public class SpojSubmission extends Submission {
 			Connection.Response loginForm = Jsoup.connect(LOGINURL)
 					.method(Connection.Method.GET).execute();
 
-			System.out.println("Spoj username - "
-					+ ((SpojUser) user).getUsername());
+			// System.out.println("Spoj username - "+ ((SpojUser)
+			// user).getUsername());
 			loginForm = Jsoup.connect(LOGINURL).data("next", "/")
 					.data("login_user", ((SpojUser) user).getUsername())
 					.data("password", ((SpojUser) user).getPass())
@@ -45,7 +45,7 @@ public class SpojSubmission extends Submission {
 				setCode(code);
 			}
 		} catch (IOException e) {
-			System.err.println("codechef: Error Fetching code" + submissionId);
+			System.err.println("spoj: Error Fetching code" + submissionId);
 			// e.printStackTrace();
 		}
 

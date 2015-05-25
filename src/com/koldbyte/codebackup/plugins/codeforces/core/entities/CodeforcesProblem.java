@@ -62,7 +62,7 @@ public class CodeforcesProblem extends Problem {
 			// replace ":p" with the problem id (like A,B,C etc)
 			problemUrl = problemUrl.replace(":p", id[1]);
 
-			url = HTTP + PROBLEMURL;
+			url = HTTP + problemUrl;
 			this.setUrl(url);
 		}
 		return url;
