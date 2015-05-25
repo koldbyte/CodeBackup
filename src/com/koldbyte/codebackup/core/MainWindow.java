@@ -25,6 +25,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -36,6 +37,7 @@ import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
+
 import javax.swing.JPasswordField;
 
 /*
@@ -62,6 +64,8 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frmCodeback.setVisible(true);
+					window.frmCodeback
+							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 				} catch (Exception e) {
 					System.err.println("Main: Error starting Application.");
 					// e.printStackTrace();

@@ -16,6 +16,7 @@ import com.koldbyte.codebackup.core.entities.Problem;
 public class CodeforcesProblem extends Problem {
 	private final String HTTP = "http://";
 	private final String PROBLEMURL = "codeforces.com/contest/:c/problem/:p";
+	private final String GYMPROBLEMURL = "codeforces.com/gym/:c/problem/:p";
 
 	@Override
 	public String fetchProblemStatement() {
@@ -55,6 +56,9 @@ public class CodeforcesProblem extends Problem {
 		if (url == null || url.isEmpty()) {
 			String[] id = problemId.split("-");
 			String problemUrl = PROBLEMURL;
+			if (id[0].length() > 3) {
+				problemUrl = GYMPROBLEMURL;
+			}
 
 			// replace ":c" with the contest id(like
 			problemUrl = problemUrl.replace(":c", id[0]);

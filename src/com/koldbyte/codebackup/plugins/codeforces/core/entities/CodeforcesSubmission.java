@@ -23,12 +23,12 @@ public class CodeforcesSubmission extends Submission {
 		}
 		try {
 			Document doc = Jsoup.connect(url).get();
-
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Elements elem = doc.select("pre.program-source");
 			String code = elem.text();
+
 			System.out.println("codeforces: fetched code " + submissionId);
 			setCode(code);
 		} catch (IOException e) {

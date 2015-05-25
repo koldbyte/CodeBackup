@@ -39,11 +39,11 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			for (Object o : submissions) {
 				JSONObject submission = (JSONObject) o;
 				String verdict = (String) submission.get("verdict");
-
+				
 				if (verdict.compareToIgnoreCase("ok") == 0) {
 					JSONObject prob = (JSONObject) submission.get("problem");
 					Long contestId = (Long) prob.get("contestId");
-
+										
 					String problemId = contestId.toString() + "-"
 							+ (String) prob.get("index");
 					if (!problemsDone.containsKey(problemId)) {
