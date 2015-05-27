@@ -23,7 +23,7 @@ public class SpojSubmission extends Submission {
 
 		try {
 			Connection.Response loginForm = Jsoup.connect(LOGINURL)
-					.method(Connection.Method.GET).execute();
+					.timeout(10000).method(Connection.Method.GET).execute();
 
 			// System.out.println("Spoj username - "+ ((SpojUser)
 			// user).getUsername());
@@ -38,7 +38,7 @@ public class SpojSubmission extends Submission {
 			String code = Jsoup.connect(url).ignoreContentType(true)
 					.cookies(loginForm.cookies()).method(Connection.Method.GET)
 					.execute().body();
-			
+
 			if (code.isEmpty()) {
 				System.err.println("Error! Invalid Spoj Credentials");
 			} else {
@@ -46,7 +46,8 @@ public class SpojSubmission extends Submission {
 				setCode(code);
 			}
 		} catch (IOException e) {
-			System.err.println("spoj: Error Fetching code" + submissionId + " -> " + e.getMessage());
+			System.err.println("spoj: Error Fetching code" + submissionId
+					+ " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
 

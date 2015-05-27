@@ -27,7 +27,7 @@ public class CodechefPluginImpl implements PluginInterface {
 		try {
 
 			// fetch the main page
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 
 			// fetch the div which contains the list of solved problems
 			Elements elems = doc.getElementsByClass("profile");
@@ -108,7 +108,7 @@ public class CodechefPluginImpl implements PluginInterface {
 
 		try {
 			// fetch the main page
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 
 			// fetch the div which contains the list of solved problems
 			Elements elems = doc.getElementsByClass("profile");

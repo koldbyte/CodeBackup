@@ -10,6 +10,8 @@ public class HTTPRequest {
 	private String userAgent = "Mozilla/5.0";
 	private String url = "http://www.google.com/search?q=mkyong";
 	private String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+	private int connectTimeout = 10000;
+	private int socketTimeout = 10000;
 
 	public HTTPRequest(String userAgent, String url, String urlParameters) {
 		super();
@@ -54,6 +56,10 @@ public class HTTPRequest {
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
+		// set Timeouts
+		con.setConnectTimeout(connectTimeout);
+		con.setReadTimeout(socketTimeout);
+
 		// optional default is GET
 		con.setRequestMethod("GET");
 
@@ -84,6 +90,10 @@ public class HTTPRequest {
 	public StringBuffer sendPost() throws Exception {
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// set Timeouts
+		con.setConnectTimeout(connectTimeout);
+		con.setReadTimeout(socketTimeout);
 
 		// add request header
 		con.setRequestMethod("POST");

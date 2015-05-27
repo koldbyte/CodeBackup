@@ -26,17 +26,17 @@ public class SpojProblem extends Problem {
 		 */
 
 		Document doc;
-		
+
 		try {
-			doc = Jsoup.connect(url).get();
-			
+			doc = Jsoup.connect(url).timeout(10000).get();
+
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Element problemBody = doc.getElementById("problem-body");
-			
+
 			System.out.println("spoj: fetched problem " + problemId);
-			
+
 			this.setProblemStatement(problemBody.html());
 		} catch (IOException e) {
 			System.err.println("spoj: Error fetching Problem Statement "

@@ -21,10 +21,10 @@ public class CodeforcesSubmission extends Submission {
 		if (url == null || url.isEmpty()) {
 			url = getSubmissionUrlFromId();
 		}
-		
+
 		try {
-			Document doc = Jsoup.connect(url).get();
-			
+			Document doc = Jsoup.connect(url).timeout(10000).get();
+
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
@@ -32,10 +32,11 @@ public class CodeforcesSubmission extends Submission {
 			String code = elem.text();
 
 			System.out.println("codeforces: fetched code " + submissionId);
-			
+
 			setCode(code);
 		} catch (IOException e) {
-			System.err.println("codeforces: Error Fetching code" + submissionId + " -> " + e.getMessage());
+			System.err.println("codeforces: Error Fetching code" + submissionId
+					+ " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
 

@@ -30,23 +30,23 @@ public class CodechefProblem extends Problem {
 		 * 	</div>
 		 */
 		Document doc;
-		
+
 		try {
 			String u = getUrl();
-			doc = Jsoup.connect(u).get();
-			
+			doc = Jsoup.connect(u).timeout(10000).get();
+
 			Elements problems = doc
 					.getElementsByClass("primary-colum-width-left");
-			
+
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
 			System.err.println("codechef: Error fetching Problem Statement "
 					+ problemId + " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
-		
+
 		System.out.println("codechef: fetched problem " + problemId);
-		
+
 		return this.problemStatement;
 	}
 

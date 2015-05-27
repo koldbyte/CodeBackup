@@ -22,17 +22,17 @@ public class CodechefSubmission extends Submission {
 	public String fetchSubmittedCode() {
 		String subUrl = getSubmissionUrl();
 		String code = "";
-		
+
 		try {
-			Document doc = Jsoup.connect(subUrl).get();
+			Document doc = Jsoup.connect(subUrl).timeout(10000).get();
 
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			code = doc.select("pre").text();
-			
+
 			System.out.println("codechef: fetched code " + submissionId);
-			
+
 			setCode(code.toString());
 		} catch (Exception e) {
 			System.err.println("codechef: Error Fetching code " + submissionId
@@ -49,9 +49,9 @@ public class CodechefSubmission extends Submission {
 		String url = submissionUrl;
 		url = url.replace(HTTP, "");
 		url = url.replace(SOLUTIONURLPREFIX, "");
-		
+
 		this.submissionId = url;
-		
+
 		return url;
 	}
 
