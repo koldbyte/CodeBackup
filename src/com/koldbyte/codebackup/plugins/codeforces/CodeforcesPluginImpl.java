@@ -39,11 +39,11 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			for (Object o : submissions) {
 				JSONObject submission = (JSONObject) o;
 				String verdict = (String) submission.get("verdict");
-				
+
 				if (verdict.compareToIgnoreCase("ok") == 0) {
 					JSONObject prob = (JSONObject) submission.get("problem");
 					Long contestId = (Long) prob.get("contestId");
-										
+
 					String problemId = contestId.toString() + "-"
 							+ (String) prob.get("index");
 					if (!problemsDone.containsKey(problemId)) {
@@ -82,8 +82,8 @@ public class CodeforcesPluginImpl implements PluginInterface {
 			}
 
 		} catch (Exception e) {
-			System.out.println("codeforces: Found " + list.size()
-					+ " Submissions");
+			System.err.println("codeforces: Error fetching list. " + " -> "
+					+ e.getMessage());
 			// e.printStackTrace();
 		}
 		System.out.println("codeforces: fetched List " + list.size());
@@ -92,7 +92,65 @@ public class CodeforcesPluginImpl implements PluginInterface {
 
 	@Override
 	public List<Submission> getAllSolvedList(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		String urlParameters = "handle=" + user.getHandle();
+
+		HTTPRequest request = new HTTPRequest(url + "?" + urlParameters, "");
+		List<Submission> list = new ArrayList<Submission>();
+		try {
+			StringBuffer response = request.sendGet();
+			JSONParser parser = new JSONParser();
+			JSONObject responseObject = (JSONObject) parser.parse(response
+					.toString());
+			JSONArray submissions = (JSONArray) responseObject.get("result");
+			for (Object o : submissions) {
+				JSONObject submission = (JSONObject) o;
+				String verdict = (String) submission.get("verdict");
+
+				if (verdict.compareToIgnoreCase("ok") == 0) {
+					JSONObject prob = (JSONObject) submission.get("problem");
+					Long contestId = (Long) prob.get("contestId");
+
+					String problemId = contestId.toString() + "-"
+							+ (String) prob.get("index");
+
+					Problem problem = new CodeforcesProblem(problemId, "");
+
+					Long sId = (Long) submission.get("id");
+					String submissionId = sId.toString();
+
+					String submissionUrl;
+					if (contestId.toString().length() > 3) {
+						submissionUrl = GYMSUBMISSIONURL.replace(":c",
+								contestId.toString()).replace(":s",
+								submissionId);
+					} else {
+						submissionUrl = SUBMISSIONURL.replace(":c",
+								contestId.toString()).replace(":s",
+								submissionId);
+					}
+					// System.out.println("URL -> " + submissionUrl);
+					String time = ((Long) submission.get("creationTimeSeconds"))
+							.toString();
+
+					String lang = (String) submission
+							.get("programmingLanguage");
+
+					Submission theSubmission = new CodeforcesSubmission(
+							submissionId, submissionUrl, problem, user);
+					theSubmission.setTimestamp(time);
+					theSubmission
+							.setLanguage(LanguagesEnum.findExtension(lang));
+					list.add(theSubmission);
+
+				}
+			}
+
+		} catch (Exception e) {
+			System.err.println("codeforces: Error fetching list. " + " -> "
+					+ e.getMessage());
+			// e.printStackTrace();
+		}
+		System.out.println("codeforces: fetched List " + list.size());
+		return list;
 	}
 }
