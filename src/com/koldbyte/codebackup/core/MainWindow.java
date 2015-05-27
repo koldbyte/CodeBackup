@@ -39,11 +39,13 @@ import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
 
 import javax.swing.JPasswordField;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 /*
  * Author : Koldbyte
- * Version : v1
- * Date : 25 May 2015
+ * Version : v2
+ * Date : 27 May 2015
  */
 public class MainWindow {
 
@@ -100,7 +102,7 @@ public class MainWindow {
 
 		frmCodeback = new JFrame();
 		frmCodeback.setResizable(false);
-		frmCodeback.setTitle("CodeBack :: By Koldbyte (Bhaskar Divya)");
+		frmCodeback.setTitle("CodeBack v2 :: By Koldbyte (Bhaskar Divya)");
 		frmCodeback.setBounds(100, 100, 675, 434);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
@@ -115,13 +117,14 @@ public class MainWindow {
 				}
 			}
 		});
-		JCheckBox chckbxCodechef = new JCheckBox("Codechef");
+		
+		final JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
 
 		chckbxCodechef.setBounds(10, 7, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodechef);
 
-		JPanel panelCodechef = new JPanel();
+		final JPanel panelCodechef = new JPanel();
 		panelCodechef.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 		panelCodechef.setBounds(10, 36, 248, 41);
@@ -138,13 +141,13 @@ public class MainWindow {
 		panelCodechef.add(handleCodechef);
 		handleCodechef.setColumns(10);
 
-		JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
+		final JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
 		chckbxCodeforces.setHorizontalAlignment(SwingConstants.LEFT);
 
 		chckbxCodeforces.setBounds(10, 84, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodeforces);
 
-		JPanel panelCodeforces = new JPanel();
+		final JPanel panelCodeforces = new JPanel();
 		panelCodeforces.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 		panelCodeforces.setLayout(null);
@@ -161,13 +164,13 @@ public class MainWindow {
 		handleCodeforces.setBounds(94, 8, 145, 20);
 		panelCodeforces.add(handleCodeforces);
 
-		JCheckBox chckbxSpoj = new JCheckBox("Spoj");
+		final JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
 
 		chckbxSpoj.setBounds(10, 161, 218, 23);
 		frmCodeback.getContentPane().add(chckbxSpoj);
 
-		JPanel panelSpoj = new JPanel();
+		final JPanel panelSpoj = new JPanel();
 		panelSpoj.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelSpoj.setLayout(null);
 		panelSpoj.setBounds(10, 190, 248, 73);
@@ -209,9 +212,10 @@ public class MainWindow {
 		// statusLabel.setColumns(78);
 		statusPanel.add(statusLabel);
 
-		statusPanel.add(new JScrollPane(statusLabel,
+		JScrollPane scrollPane = new JScrollPane(statusLabel,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		statusPanel.add(scrollPane,
 				BorderLayout.CENTER);
 
 		MessageConsole mc = new MessageConsole(statusLabel);
@@ -252,28 +256,29 @@ public class MainWindow {
 		URL url = this.getClass().getResource("/progress.gif");
 		ImageIcon progressIcon = new ImageIcon(url);
 
-		JLabel progressCodechef = new JLabel();
+		final JLabel progressCodechef = new JLabel();
 		progressCodechef.setBounds(234, 7, 24, 24);
 		progressCodechef.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressCodechef);
 		progressCodechef.setVisible(false);
 
-		JLabel progressCodeforces = new JLabel();
+		final JLabel progressCodeforces = new JLabel();
 		progressCodeforces.setBounds(234, 83, 24, 24);
 		progressCodeforces.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressCodeforces);
 		progressCodeforces.setVisible(false);
 
-		JLabel progressSpoj = new JLabel();
+		final JLabel progressSpoj = new JLabel();
 		progressSpoj.setBounds(234, 160, 24, 24);
 		progressSpoj.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressSpoj);
 
-		JCheckBox chkOverwrite = new JCheckBox("Overwrite if Code Exist");
+		final JCheckBox chkOverwrite = new JCheckBox("Overwrite if Code Exist");
 		chkOverwrite.setBounds(286, 84, 373, 23);
 		frmCodeback.getContentPane().add(chkOverwrite);
 
-		JCheckBox chkProblem = new JCheckBox("Also Fetch Problem statements");
+		final JCheckBox chkProblem = new JCheckBox(
+				"Also Fetch Problem statements");
 		chkProblem.setBounds(286, 113, 373, 23);
 		frmCodeback.getContentPane().add(chkProblem);
 
@@ -299,10 +304,12 @@ public class MainWindow {
 		});
 		btnInfo.setBounds(426, 186, 89, 23);
 		frmCodeback.getContentPane().add(btnInfo);
-		
-		JCheckBox chkFetchAllAccepted = new JCheckBox("Fetch All Accepted Submissions");
+
+		final JCheckBox chkFetchAllAccepted = new JCheckBox(
+				"Fetch All Accepted Submissions");
 		chkFetchAllAccepted.setBounds(286, 139, 373, 23);
 		frmCodeback.getContentPane().add(chkFetchAllAccepted);
+		frmCodeback.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{chckbxCodechef, handleCodechef, chckbxCodeforces, handleCodeforces, chckbxSpoj, handleSpoj, passSpoj, lblDirectory, txtDir, btnDirectory, chkOverwrite, chkProblem, chkFetchAllAccepted, btnInfo, btnRun, btnExit, statusLabel, panelCodechef, lblHandle, panelCodeforces, label, panelSpoj, label_1, lblPass, statusPanel, scrollPane, statusLabel, progressCodechef, progressCodeforces, progressSpoj}));
 		progressSpoj.setVisible(false);
 
 		chckbxCodechef.addChangeListener(new ChangeListener() {
@@ -351,7 +358,7 @@ public class MainWindow {
 				AppConfig.setOverWrite(chkOverwrite.isSelected());
 				AppConfig.setFetchProblem(chkProblem.isSelected());
 				AppConfig.setFetchAllAC(chkFetchAllAccepted.isSelected());
-				
+
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
@@ -378,7 +385,7 @@ public class MainWindow {
 										progressCodechef);
 								progressCodechef.setIcon(progress);
 								progressCodechef.setVisible(true);
-								
+
 								runnable.execute();
 							}
 						}
@@ -401,7 +408,6 @@ public class MainWindow {
 										progressCodeforces);
 								progressCodeforces.setIcon(progress);
 								progressCodeforces.setVisible(true);
-
 
 								runnable.execute();
 							}
