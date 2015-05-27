@@ -23,7 +23,7 @@ public class PersistHandler {
 		String fileName = sub.getProblem().getProblemId() + "-"
 				+ sub.getSubmissionId() + "."
 				+ sub.getLanguage().getExtension();
-		// TODO: Handle file name extensions for code
+		// Handle file name extensions for code
 		File file = new File(finalDestination + fileName);
 
 		// now make sure whole path is created
@@ -40,7 +40,7 @@ public class PersistHandler {
 				writer.write(sub.getCode());
 			} catch (IOException e) {
 				System.err.println(pluginName + ": Error saving code "
-						+ sub.getSubmissionId());
+						+ sub.getSubmissionId() + "-> " + e.getMessage());
 				// e.printStackTrace();
 			}
 		}
@@ -72,7 +72,8 @@ public class PersistHandler {
 			} catch (IOException e) {
 				System.err.println(pluginName
 						+ ": Error saving problem statement "
-						+ sub.getProblem().getProblemId());
+						+ sub.getProblem().getProblemId() + " -> "
+						+ e.getMessage());
 				// e.printStackTrace();
 			}
 		}

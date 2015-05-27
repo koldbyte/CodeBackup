@@ -359,7 +359,7 @@ public class MainWindow {
 				String succesMsg = "";
 				String dir = txtDir.getText();
 				if (dir == null || dir.isEmpty()) {
-					msg += "Please provide a output Directory.\n";
+					msg += "Please provide an output Directory.\n";
 				} else {
 					/*
 					 * Check for codechef
@@ -371,17 +371,15 @@ public class MainWindow {
 						} else {
 							User user = new CodechefUser(codechefHandle);
 							if (!user.isValidUser()) {
-								msg += "Provided Codechef handle is invalid.\n";
+								msg += "Entered Codechef handle is invalid.\n";
 							} else {
 								PluginWorker runnable = new PluginWorker(dir,
 										user, PluginEnum.CODECHEF,
 										progressCodechef);
 								progressCodechef.setIcon(progress);
 								progressCodechef.setVisible(true);
-								// Run in the new Thread
-								// TODO:
+								
 								runnable.execute();
-								// runnable.run();
 							}
 						}
 					}
@@ -396,17 +394,16 @@ public class MainWindow {
 						} else {
 							User user = new CodeforcesUser(codeforceHandle);
 							if (!user.isValidUser()) {
-								msg += "Provided Codeforces handle is invalid.\n";
+								msg += "Entered Codeforces handle is invalid.\n";
 							} else {
 								PluginWorker runnable = new PluginWorker(dir,
 										user, PluginEnum.CODEFORCES,
 										progressCodeforces);
 								progressCodeforces.setIcon(progress);
 								progressCodeforces.setVisible(true);
-								// Run in the new Thread
-								// TODO:
+
+
 								runnable.execute();
-								// runnable.run();
 							}
 						}
 					}
@@ -426,16 +423,14 @@ public class MainWindow {
 							((SpojUser) user).setUsername(spojHandle);
 							((SpojUser) user).setPass(spojPass);
 							if (!user.isValidUser()) {
-								msg += "Provided Spoj handle is invalid.\n";
+								msg += "Entered Spoj handle is invalid.\n";
 							} else {
 								PluginWorker runnable = new PluginWorker(dir,
 										user, PluginEnum.SPOJ, progressSpoj);
 								progressSpoj.setIcon(progress);
 								progressSpoj.setVisible(true);
-								// Run in the new Thread
-								// TODO:
+
 								runnable.execute();
-								// runnable.run();
 							}
 						}
 					}

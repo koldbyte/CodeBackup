@@ -1,5 +1,7 @@
 package com.koldbyte.codebackup.core;
-
+/*
+ * Stores the user selected options from the UI
+ */
 public class AppConfig {
 	public static Boolean overWrite = false;
 	public static Boolean fetchProblem = false;

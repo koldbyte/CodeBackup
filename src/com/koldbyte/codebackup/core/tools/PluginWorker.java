@@ -17,7 +17,6 @@ import com.koldbyte.codebackup.plugins.PluginInterface;
  *  as defined in the PluginEnum.java to fetch their
  *  respective submission list.
  *  
- *  This class will also 
  */
 public class PluginWorker extends SwingWorker<Integer, Integer> {
 	private User user;

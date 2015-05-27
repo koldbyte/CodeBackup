@@ -33,6 +33,7 @@ public class CodeforcesProblem extends Problem {
 		// fetch the page containing the problem statement
 		Document doc;
 		String url = getUrl();
+		
 		try {
 			doc = Jsoup.connect(url).get();
 
@@ -40,11 +41,13 @@ public class CodeforcesProblem extends Problem {
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Elements problems = doc.getElementsByClass("problemindexholder");
+			
 			System.out.println("codeforces: fetched problem " + problemId);
+			
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
 			System.err.println("codeforces: Error fetching Problem Statement "
-					+ problemId);
+					+ problemId + " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
 

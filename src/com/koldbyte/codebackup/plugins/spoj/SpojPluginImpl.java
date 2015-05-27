@@ -31,31 +31,41 @@ public class SpojPluginImpl implements PluginInterface {
 					.method(Connection.Method.GET).execute();
 
 			String lines[] = response.body().split("\n");
+			
 			// ignore first 9 lines 0...1...2......8
 			if (lines.length < 9) {
 				System.out.println("Error! Invalid Format of Spoj signedlist");
 			} else {
 				int i = 9; // start from 9th line
-				Map<String, Boolean> problemsDone = new HashMap<String, Boolean>();
 				String end = "\\------------------------------------------------------------------------------/";
+
+				Map<String, Boolean> problemsDone = new HashMap<String, Boolean>();
+				
 				while (i < lines.length && lines[i].compareTo(end) != 0) {
 					String subEntry[] = lines[i].split("\\|");
+					
 					// if solution is AC or status is a score
 					String status = subEntry[4].trim();
 					if (status.compareToIgnoreCase("AC") == 0
 							|| status.matches("-?\\d+(\\.\\d+)?")) {
 						String problem = subEntry[3].trim();
+						
 						if (!problemsDone.containsKey(problem)) {
 							String sId = subEntry[1].trim();
 							Problem p = new SpojProblem(problem, "");
+							
 							String lang = subEntry[7].trim();
 							String time = subEntry[2].trim();
+							
 							Submission submission = new SpojSubmission(sId, "",
 									p, user);
+							
 							submission.setTimestamp(time);
 							submission.setLanguage(LanguagesEnum
 									.findExtension(lang));
+							
 							subs.add(submission);
+							
 							problemsDone.put(problem, true);
 						}
 					}
@@ -86,10 +96,11 @@ public class SpojPluginImpl implements PluginInterface {
 				System.out.println("Error! Invalid Format of Spoj signedlist");
 			} else {
 				int i = 9; // start from 9th line
-
 				String end = "\\------------------------------------------------------------------------------/";
+				
 				while (i < lines.length && lines[i].compareTo(end) != 0) {
 					String subEntry[] = lines[i].split("\\|");
+					
 					// if solution is AC or status is a score
 					String status = subEntry[4].trim();
 					if (status.compareToIgnoreCase("AC") == 0
@@ -98,13 +109,17 @@ public class SpojPluginImpl implements PluginInterface {
 
 						String sId = subEntry[1].trim();
 						Problem p = new SpojProblem(problem, "");
+						
 						String lang = subEntry[7].trim();
 						String time = subEntry[2].trim();
+						
 						Submission submission = new SpojSubmission(sId, "", p,
 								user);
+						
 						submission.setTimestamp(time);
 						submission.setLanguage(LanguagesEnum
 								.findExtension(lang));
+						
 						subs.add(submission);
 					}
 					i++;

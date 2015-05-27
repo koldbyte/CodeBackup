@@ -26,24 +26,28 @@ public class CodeforcesPluginImpl implements PluginInterface {
 
 	public List<Submission> getSolvedList(User user) {
 		String urlParameters = "handle=" + user.getHandle();
-
 		HTTPRequest request = new HTTPRequest(url + "?" + urlParameters, "");
+		
 		List<Submission> list = new ArrayList<Submission>();
+		
 		try {
 			StringBuffer response = request.sendGet();
+			
 			JSONParser parser = new JSONParser();
 			JSONObject responseObject = (JSONObject) parser.parse(response
 					.toString());
 			JSONArray submissions = (JSONArray) responseObject.get("result");
+			
 			Map<String, Boolean> problemsDone = new HashMap<String, Boolean>();
+			
 			for (Object o : submissions) {
 				JSONObject submission = (JSONObject) o;
 				String verdict = (String) submission.get("verdict");
 
 				if (verdict.compareToIgnoreCase("ok") == 0) {
 					JSONObject prob = (JSONObject) submission.get("problem");
+					
 					Long contestId = (Long) prob.get("contestId");
-
 					String problemId = contestId.toString() + "-"
 							+ (String) prob.get("index");
 					if (!problemsDone.containsKey(problemId)) {
@@ -66,16 +70,19 @@ public class CodeforcesPluginImpl implements PluginInterface {
 						String time = ((Long) submission
 								.get("creationTimeSeconds")).toString();
 
-						// TODO: fix language for submission- codeforces
+
 						String lang = (String) submission
 								.get("programmingLanguage");
 
 						Submission theSubmission = new CodeforcesSubmission(
 								submissionId, submissionUrl, problem, user);
+						
 						theSubmission.setTimestamp(time);
 						theSubmission.setLanguage(LanguagesEnum
 								.findExtension(lang));
+						
 						list.add(theSubmission);
+						
 						problemsDone.put(problemId, true);
 					}
 				}
@@ -96,20 +103,23 @@ public class CodeforcesPluginImpl implements PluginInterface {
 
 		HTTPRequest request = new HTTPRequest(url + "?" + urlParameters, "");
 		List<Submission> list = new ArrayList<Submission>();
+		
 		try {
 			StringBuffer response = request.sendGet();
+			
 			JSONParser parser = new JSONParser();
 			JSONObject responseObject = (JSONObject) parser.parse(response
 					.toString());
 			JSONArray submissions = (JSONArray) responseObject.get("result");
+			
 			for (Object o : submissions) {
 				JSONObject submission = (JSONObject) o;
 				String verdict = (String) submission.get("verdict");
 
 				if (verdict.compareToIgnoreCase("ok") == 0) {
 					JSONObject prob = (JSONObject) submission.get("problem");
+					
 					Long contestId = (Long) prob.get("contestId");
-
 					String problemId = contestId.toString() + "-"
 							+ (String) prob.get("index");
 
@@ -137,9 +147,11 @@ public class CodeforcesPluginImpl implements PluginInterface {
 
 					Submission theSubmission = new CodeforcesSubmission(
 							submissionId, submissionUrl, problem, user);
+					
 					theSubmission.setTimestamp(time);
 					theSubmission
 							.setLanguage(LanguagesEnum.findExtension(lang));
+					
 					list.add(theSubmission);
 
 				}
