@@ -69,7 +69,14 @@ public class PluginWorker extends SwingWorker<Integer, Integer> {
 		PluginInterface plugin = pluginEnum.getPlugin();
 		if (user != null) {
 			System.out.println("Started " + pluginEnum.name());
-			List<Submission> subs = plugin.getSolvedList(user);
+			List<Submission> subs;
+			if (AppConfig.getFetchAllAC()) {
+				System.out.println(pluginEnum.name() + ": Mode-> Fetch All Accepted submissions.");
+				subs = plugin.getAllSolvedList(user);
+			} else {
+				System.out.println(pluginEnum.name() + ": Mode-> Fetch only the last Accepted submissions.");
+				subs = plugin.getSolvedList(user);
+			}
 			for (Submission sub : subs) {
 				sub.fetchSubmittedCode();
 				PersistHandler.save(pluginEnum.getName(), dir, sub);

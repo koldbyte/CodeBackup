@@ -31,6 +31,79 @@ public class CodechefPluginImpl implements PluginInterface {
 			Elements elems = doc.getElementsByClass("profile");
 
 			Elements links = elems.select("a[href]");
+			System.out.println("codechef: Found " + links.size()
+					+ " Problems linked in your profile page");
+			for (Element link : links) {
+				String linkurl = link.attr("abs:href");
+				if (linkurl.contains("status")) {
+					String problemId = link.text();
+					Problem problem = new CodechefProblem(problemId, "");
+					// if it is a proper "status" page, fetch this page
+					Document page = Jsoup.connect(linkurl).get();
+
+					// loop through the code find the first Accepted submissions
+					Elements rows = page.select(".kol");
+					for (Element tr : rows) {
+						// Element tr = page.select(".kol").get(0);
+						Elements tds = tr.getElementsByTag("td");
+						String result = tds.get(3).select("img").get(0)
+								.attr("src");
+						if (result.contains("tick")) { // is a accepted solution
+							String id = tds.get(0).text();
+							String time = tds.get(1).text();
+							String lang = tds.get(6).text();
+
+							String solUrl = tds.get(7).select("a[href]")
+									.attr("abs:href");
+							// the solUrl is of pattern
+							// http://www.codechef.com/viewsolution/2078521
+							// It should be
+							// http://www.codechef.com/viewplaintext/2078521
+							solUrl = solUrl.replace("viewsolution",
+									"viewplaintext");
+
+							Submission sub = new CodechefSubmission(id, solUrl,
+									problem, user);
+							// TODO: Fix the code language
+							sub.setLanguage(LanguagesEnum.findExtension(lang));
+							sub.setTimestamp(time);
+							submissions.add(sub);
+
+							// We have found the AC submission for the current
+							// problem
+							// break now from the for loop to avoid adding more
+							// submissions of the same problem.
+
+							break;
+						}
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			System.err.println("codechef: Error fetching list." + " -> " + e.getMessage());
+			// e.printStackTrace();
+		}
+		System.out.println("codechef: Found " + submissions.size()
+				+ " Submissions");
+
+		return submissions;
+	}
+
+	@Override
+	public List<Submission> getAllSolvedList(User user) {
+		String url = LISTPAGE + user.getHandle();
+		ArrayList<Submission> submissions = new ArrayList<Submission>();
+		try {
+			// fetch the main page
+			Document doc = Jsoup.connect(url).get();
+
+			// fetch the div which contains the list of solved
+			Elements elems = doc.getElementsByClass("profile");
+
+			Elements links = elems.select("a[href]");
+			System.out.println("codechef: Found " + links.size()
+					+ " Problems linked in your profile page");
 			for (Element link : links) {
 				String linkurl = link.attr("abs:href");
 				if (linkurl.contains("status")) {
@@ -40,34 +113,40 @@ public class CodechefPluginImpl implements PluginInterface {
 					// fetch this page
 					Document page = Jsoup.connect(linkurl).get();
 
-					// TODO: extend app to process more than one submission
-					// Currently let us fetch only the first submission
-					Element tr = page.select(".kol").get(0);
-					Elements tds = tr.getElementsByTag("td");
-					String id = tds.get(0).text();
-					String time = tds.get(1).text();
-					String lang = tds.get(6).text();
+					Elements rows = page.select(".kol");
+					for (Element tr : rows) {
+						// Element tr = page.select(".kol").get(0);
+						Elements tds = tr.getElementsByTag("td");
+						String result = tds.get(3).select("img").get(0)
+								.attr("src");
+						if (result.contains("tick")) { // is a accepted solution
+							String id = tds.get(0).text();
+							String time = tds.get(1).text();
+							String lang = tds.get(6).text();
 
-					String solUrl = tds.get(7).select("a[href]")
-							.attr("abs:href");
-					// TODO: the solUrl is of pattern
-					// http://www.codechef.com/viewsolution/2078521
-					// It should be
-					// http://www.codechef.com/viewplaintext/2078521
-					solUrl = solUrl.replace("viewsolution", "viewplaintext");
+							String solUrl = tds.get(7).select("a[href]")
+									.attr("abs:href");
 
-					Submission sub = new CodechefSubmission(id, solUrl,
-							problem, user);
-					// TODO: Fix the code language
-					sub.setLanguage(LanguagesEnum.findExtension(lang));
-					sub.setTimestamp(time);
-					submissions.add(sub);
+							// the solUrl is of pattern
+							// http://www.codechef.com/viewsolution/2078521
+							// It should be
+							// http://www.codechef.com/viewplaintext/2078521
+							solUrl = solUrl.replace("viewsolution",
+									"viewplaintext");
+
+							Submission sub = new CodechefSubmission(id, solUrl,
+									problem, user);
+
+							sub.setLanguage(LanguagesEnum.findExtension(lang));
+							sub.setTimestamp(time);
+							submissions.add(sub);
+						}
+					}
 				}
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("codechef: Error fetching list.");
+			System.err.println("codechef: Error fetching list." + " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
 		System.out.println("codechef: Found " + submissions.size()

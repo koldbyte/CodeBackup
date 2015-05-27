@@ -71,4 +71,10 @@ public class SpojPluginImpl implements PluginInterface {
 		System.out.println("spoj: fetched List " + subs.size());
 		return subs;
 	}
+
+	@Override
+	public List<Submission> getAllSolvedList(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

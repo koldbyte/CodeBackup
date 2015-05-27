@@ -7,4 +7,5 @@ import com.koldbyte.codebackup.core.entities.User;
 
 public interface PluginInterface {
 	public List<Submission> getSolvedList(User user);
+	public List<Submission> getAllSolvedList(User user);
 }

@@ -1,4 +1,4 @@
- package com.koldbyte.codebackup.plugins.codechef.core.entities;
+package com.koldbyte.codebackup.plugins.codechef.core.entities;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,7 +32,8 @@ public class CodechefSubmission extends Submission {
 			System.out.println("codechef: fetched code " + submissionId);
 			setCode(code.toString());
 		} catch (Exception e) {
-			System.err.println("codechef: Error Fetching code " + submissionId);
+			System.err.println("codechef: Error Fetching code " + submissionId
+					+ " -> " + e.getMessage());
 			// e.printStackTrace();
 		}
 

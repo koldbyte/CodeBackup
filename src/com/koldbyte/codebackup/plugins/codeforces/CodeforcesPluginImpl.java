@@ -89,4 +89,10 @@ public class CodeforcesPluginImpl implements PluginInterface {
 		System.out.println("codeforces: fetched List " + list.size());
 		return list;
 	}
+
+	@Override
+	public List<Submission> getAllSolvedList(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

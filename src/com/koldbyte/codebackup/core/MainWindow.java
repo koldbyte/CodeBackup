@@ -297,8 +297,12 @@ public class MainWindow {
 						"About CodeBack", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		btnInfo.setBounds(426, 161, 89, 23);
+		btnInfo.setBounds(426, 186, 89, 23);
 		frmCodeback.getContentPane().add(btnInfo);
+		
+		JCheckBox chkFetchAllAccepted = new JCheckBox("Fetch All Accepted Submissions");
+		chkFetchAllAccepted.setBounds(286, 139, 373, 23);
+		frmCodeback.getContentPane().add(chkFetchAllAccepted);
 		progressSpoj.setVisible(false);
 
 		chckbxCodechef.addChangeListener(new ChangeListener() {
@@ -346,7 +350,8 @@ public class MainWindow {
 				// Initialize Appconfig
 				AppConfig.setOverWrite(chkOverwrite.isSelected());
 				AppConfig.setFetchProblem(chkProblem.isSelected());
-
+				AppConfig.setFetchAllAC(chkFetchAllAccepted.isSelected());
+				
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
