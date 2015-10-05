@@ -53,7 +53,11 @@ public class CodechefPluginImpl implements PluginInterface {
 					for (Element tr : rows) {
 
 						Elements tds = tr.getElementsByTag("td");
-
+						
+						//TODO: Add a check to stop processing when encountering "No Recent Activity"
+						if(tds.text().contains("No Recent Activity")){
+							break;
+						}
 						String result = tds.get(3).select("img").get(0)
 								.attr("src");
 
