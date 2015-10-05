@@ -15,20 +15,36 @@ import com.koldbyte.codebackup.core.entities.User;
 import com.koldbyte.codebackup.plugins.PluginInterface;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojProblem;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojSubmission;
+import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
 
 public class SpojPluginImpl implements PluginInterface {
 
 	private final String HTTP = "http://";
 	private final String SUBMISSIONLIST = "www.spoj.com/status/:u/signedlist/";
 
+	private final String LOGINURL = "http://www.spoj.com/login";
+	
 	@Override
 	public List<Submission> getSolvedList(User user) {
 		List<Submission> subs = new ArrayList<Submission>();
 		String url = HTTP + SUBMISSIONLIST.replace(":u", user.getHandle());
 
 		try {
+			//TODO: Add login to fetch the spoj signedlist
+			Connection.Response loginForm = Jsoup.connect(LOGINURL)
+					.timeout(10000).method(Connection.Method.GET).execute();
+
+			System.out.println("Spoj username - "+ ((SpojUser)
+			user).getUsername());
+			loginForm = Jsoup.connect(LOGINURL).data("next", "/")
+					.data("login_user", ((SpojUser) user).getUsername())
+					.data("password", ((SpojUser) user).getPass())
+					.data("autologin", "1").cookies(loginForm.cookies())
+					.method(Connection.Method.POST).execute();
+
+			
 			Connection.Response response = Jsoup.connect(url).timeout(10000)
-					.method(Connection.Method.GET).execute();
+					.cookies(loginForm.cookies()).method(Connection.Method.GET).execute();
 
 			String lines[] = response.body().split("\n");
 
@@ -87,8 +103,21 @@ public class SpojPluginImpl implements PluginInterface {
 		String url = HTTP + SUBMISSIONLIST.replace(":u", user.getHandle());
 
 		try {
+			//TODO: Add login to fetch the spoj signedlist
+			Connection.Response loginForm = Jsoup.connect(LOGINURL)
+					.timeout(10000).method(Connection.Method.GET).execute();
+
+			System.out.println("Spoj username - "+ ((SpojUser)
+			user).getUsername());
+			loginForm = Jsoup.connect(LOGINURL).data("next", "/")
+					.data("login_user", ((SpojUser) user).getUsername())
+					.data("password", ((SpojUser) user).getPass())
+					.data("autologin", "1").cookies(loginForm.cookies())
+					.method(Connection.Method.POST).execute();
+
+			
 			Connection.Response response = Jsoup.connect(url).timeout(10000)
-					.method(Connection.Method.GET).execute();
+					.cookies(loginForm.cookies()).method(Connection.Method.GET).execute();
 
 			String lines[] = response.body().split("\n");
 			// ignore first 9 lines 0...1...2......8
