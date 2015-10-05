@@ -55,40 +55,40 @@ public class CodechefPluginImpl implements PluginInterface {
 						Elements tds = tr.getElementsByTag("td");
 						
 						//TODO: Add a check to stop processing when encountering "No Recent Activity"
-						if(tds.text().contains("No Recent Activity")){
-							break;
-						}
-						String result = tds.get(3).select("img").get(0)
-								.attr("src");
-
-						if (result.contains("tick")) { // is a accepted solution
-							String id = tds.get(0).text();
-							String time = tds.get(1).text();
-							String lang = tds.get(6).text();
-
-							String solUrl = tds.get(7).select("a[href]")
-									.attr("abs:href");
-							// the solUrl is of pattern
-							// http://www.codechef.com/viewsolution/2078521
-							// It should be
-							// http://www.codechef.com/viewplaintext/2078521
-							solUrl = solUrl.replace("viewsolution",
-									"viewplaintext");
-
-							Submission sub = new CodechefSubmission(id, solUrl,
-									problem, user);
-
-							sub.setLanguage(LanguagesEnum.findExtension(lang));
-							sub.setTimestamp(time);
-
-							submissions.add(sub);
-
-							// We have found the AC submission for the current
-							// problem
-							// break now from the for loop to avoid adding more
-							// submissions of the same problem.
-
-							break;
+						if(!tds.text().contains("No Recent Activity")){
+							
+							String result = tds.get(3).select("img").get(0)
+									.attr("src");
+	
+							if (result.contains("tick")) { // is a accepted solution
+								String id = tds.get(0).text();
+								String time = tds.get(1).text();
+								String lang = tds.get(6).text();
+	
+								String solUrl = tds.get(7).select("a[href]")
+										.attr("abs:href");
+								// the solUrl is of pattern
+								// http://www.codechef.com/viewsolution/2078521
+								// It should be
+								// http://www.codechef.com/viewplaintext/2078521
+								solUrl = solUrl.replace("viewsolution",
+										"viewplaintext");
+	
+								Submission sub = new CodechefSubmission(id, solUrl,
+										problem, user);
+	
+								sub.setLanguage(LanguagesEnum.findExtension(lang));
+								sub.setTimestamp(time);
+	
+								submissions.add(sub);
+	
+								// We have found the AC submission for the current
+								// problem
+								// break now from the for loop to avoid adding more
+								// submissions of the same problem.
+	
+								break;
+							}
 						}
 					}
 				}
@@ -138,29 +138,33 @@ public class CodechefPluginImpl implements PluginInterface {
 						// Element tr = page.select(".kol").get(0);
 						Elements tds = tr.getElementsByTag("td");
 
-						String result = tds.get(3).select("img").get(0)
-								.attr("src");
-						if (result.contains("tick")) { // is a accepted solution
-							String id = tds.get(0).text();
-							String time = tds.get(1).text();
-							String lang = tds.get(6).text();
-
-							String solUrl = tds.get(7).select("a[href]")
-									.attr("abs:href");
-							// the solUrl is of pattern
-							// http://www.codechef.com/viewsolution/2078521
-							// It should be
-							// http://www.codechef.com/viewplaintext/2078521
-							solUrl = solUrl.replace("viewsolution",
-									"viewplaintext");
-
-							Submission sub = new CodechefSubmission(id, solUrl,
-									problem, user);
-
-							sub.setLanguage(LanguagesEnum.findExtension(lang));
-							sub.setTimestamp(time);
-
-							submissions.add(sub);
+						//TODO: Add a check to stop processing when encountering "No Recent Activity"
+						if(!tds.text().contains("No Recent Activity")){
+						
+							String result = tds.get(3).select("img").get(0)
+									.attr("src");
+							if (result.contains("tick")) { // is a accepted solution
+								String id = tds.get(0).text();
+								String time = tds.get(1).text();
+								String lang = tds.get(6).text();
+	
+								String solUrl = tds.get(7).select("a[href]")
+										.attr("abs:href");
+								// the solUrl is of pattern
+								// http://www.codechef.com/viewsolution/2078521
+								// It should be
+								// http://www.codechef.com/viewplaintext/2078521
+								solUrl = solUrl.replace("viewsolution",
+										"viewplaintext");
+	
+								Submission sub = new CodechefSubmission(id, solUrl,
+										problem, user);
+	
+								sub.setLanguage(LanguagesEnum.findExtension(lang));
+								sub.setTimestamp(time);
+	
+								submissions.add(sub);
+							}
 						}
 					}
 				}
