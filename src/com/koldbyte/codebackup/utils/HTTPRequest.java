@@ -1,4 +1,5 @@
 package com.koldbyte.codebackup.utils;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -55,11 +56,11 @@ public class HTTPRequest {
 	// HTTP GET request
 	public StringBuffer sendGet() throws Exception {
 
-		Properties systemProperties = System.getProperties();
-		String proxy = "10.10.78.22";
-		String port = "3128";
-		systemProperties.setProperty("http.proxyHost",proxy);
-		systemProperties.setProperty("http.proxyPort",port);
+//		Properties systemProperties = System.getProperties();
+//		String proxy = "10.10.78.22";
+//		String port = "3128";
+//		systemProperties.setProperty("http.proxyHost",proxy);
+//		systemProperties.setProperty("http.proxyPort",port);
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -97,11 +98,11 @@ public class HTTPRequest {
 	// HTTP POST request
 	public StringBuffer sendPost() throws Exception {
 		
-		Properties systemProperties = System.getProperties();
-		String proxy = "10.10.78.22";
-		String port = "3128";
-		systemProperties.setProperty("http.proxyHost",proxy);
-		systemProperties.setProperty("http.proxyPort",port);
+//		Properties systemProperties = System.getProperties();
+//		String proxy = "10.10.78.22";
+//		String port = "3128";
+//		systemProperties.setProperty("http.proxyHost",proxy);
+//		systemProperties.setProperty("http.proxyPort",port);
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
