@@ -3,7 +3,7 @@ CodeBack is a tool to download all your code submissions from code contest sites
 GITHUB : [https://github.com/koldbyte/CodeBackup](https://github.com/koldbyte/CodeBackup)
 
 Update v2:  
-I have updated the app.  
+1) I have updated the app.  
 It is now Java7 compatible.   
 I also added new features &mdash; Fetch all AC submissions.   
 It also includes some bug fixes.  
@@ -36,4 +36,28 @@ Credits: Used some idea from https://github.com/ideamonk/spojbackup for Spoj
 TODO::  
 1) For fetching code of Codeforces gym submissions, password is also required. So currently, no gym submissions will be downloaded.   
 2) Add check to verify if the handle is valid.  
+
+
+
+
+
+
+Update 3 : Proxy Support is added. Now its has become easy for competitive programmers(mostly college students) to download codes behind their college proxies without setting it manually.
+
+Features Added:
+1) You can download codes by specifying proxy via a proxy server also
+
+
+
+![](https://cloud.githubusercontent.com/assets/5080310/12817606/dd7515bc-cb78-11e5-850c-036510ff5170.png)
+
+
+
+[Download here v3 (.jar) ](https://github.com/devanshdalal/CodeBackup/releases/download/Codeback_v3/CodeBackup_v3.jar)
+
+
+
+Credits: Previous work done by Koldbyte and https://github.com/ideamonk/spojbackup.
+
+TODO:
 3) Add support to download submissions from other sites like HackerRank, HackerEarth etc.
