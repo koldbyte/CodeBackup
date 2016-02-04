@@ -42,10 +42,10 @@ TODO::
 
 
 
-**Update 3 :** 
+**Update 3 :** <br> 
 Proxy Support is added. Now its has become easy for competitive programmers(mostly college students) to download codes behind their college proxies without setting it manually.
 
-*Features Added:*
+*Features Added:* <br>
 1) You can download codes by specifying proxy via a proxy server also
 
 
@@ -58,6 +58,6 @@ Proxy Support is added. Now its has become easy for competitive programmers(most
 
 **Credits**: Previous work done by Koldbyte and https://github.com/ideamonk/spojbackup.
 
-TODO:
+TODO:<br>
 
 3) Add support to download submissions from other sites like HackerRank, HackerEarth etc.
