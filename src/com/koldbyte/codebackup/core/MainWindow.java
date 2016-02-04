@@ -42,11 +42,6 @@ import javax.swing.JPasswordField;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 
-/*
- * Author : Koldbyte
- * Version : v2
- * Date : 27 May 2015
- */
 public class MainWindow {
 
 	private JFrame frmCodeback;
@@ -54,6 +49,8 @@ public class MainWindow {
 	private JTextField handleCodeforces;
 	private JTextField handleSpoj;
 	private JPasswordField passSpoj;
+	private JTextField proxyName;
+	private JTextField proxyPort;
 	private JTextField txtDir;
 	private ImageIcon progress;
 
@@ -66,6 +63,12 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frmCodeback.setVisible(true);
+					
+//					System.setProperty("http.proxyHost", "10.10.78.22");
+//					System.setProperty("http.proxyPort", "3128");
+//					System.setProperty("https.proxyHost", "10.10.78.22");
+//					System.setProperty("https.proxyPort", "3128");
+					
 					window.frmCodeback
 							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 				} catch (Exception e) {
@@ -103,7 +106,7 @@ public class MainWindow {
 		frmCodeback = new JFrame();
 		frmCodeback.setResizable(false);
 		frmCodeback.setTitle("CodeBack v2 :: By Koldbyte (Bhaskar Divya)");
-		frmCodeback.setBounds(100, 100, 675, 434);
+		frmCodeback.setBounds(100, 100, 675, 600);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
 		frmCodeback.addWindowListener(new WindowAdapter() {
@@ -117,6 +120,8 @@ public class MainWindow {
 				}
 			}
 		});
+		
+		////// Codechef options
 		
 		final JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
@@ -140,7 +145,9 @@ public class MainWindow {
 		handleCodechef.setBounds(94, 8, 145, 20);
 		panelCodechef.add(handleCodechef);
 		handleCodechef.setColumns(10);
-
+		
+		////////////////////////// Codeforces options
+		
 		final JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
 		chckbxCodeforces.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -163,7 +170,9 @@ public class MainWindow {
 		handleCodeforces.setColumns(10);
 		handleCodeforces.setBounds(94, 8, 145, 20);
 		panelCodeforces.add(handleCodeforces);
-
+		
+		//////////////////////////Spoj options
+		
 		final JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -194,10 +203,44 @@ public class MainWindow {
 		passSpoj.setBounds(94, 39, 145, 20);
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
+		
+		////////////////////// Proxy options
+		final JCheckBox chckbxProxy = new JCheckBox("proxy");
+		chckbxProxy.setHorizontalAlignment(SwingConstants.LEFT);
+
+		chckbxProxy.setBounds(10, 274, 218, 23);
+		frmCodeback.getContentPane().add(chckbxProxy);
+
+		final JPanel panelProxy = new JPanel();
+		panelProxy.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelProxy.setLayout(null);
+		panelProxy.setBounds(10, 305, 248, 73);
+		frmCodeback.getContentPane().add(panelProxy);
+		panelProxy.setVisible(false);
+
+		JLabel labelName = new JLabel("Proxy");
+		labelName.setBounds(10, 11, 74, 14);
+		panelProxy.add(labelName);
+		
+		proxyName = new JTextField();
+		proxyName.setColumns(10);
+		proxyName.setBounds(94, 8, 145, 20);
+		panelProxy.add(proxyName);
+		
+		JLabel labelPort = new JLabel("Port");
+		labelPort.setBounds(10, 40, 74, 14);
+		panelProxy.add(labelPort);
+		
+		proxyPort = new JTextField();
+		proxyPort.setColumns(10);
+		proxyPort.setBounds(94, 39, 145, 20);
+		panelProxy.add(proxyPort);
+		
+		///////////////////////////////////////
 
 		JPanel statusPanel = new JPanel(new BorderLayout());
 		statusPanel.setToolTipText("Status");
-		statusPanel.setBounds(10, 274, 649, 124);
+		statusPanel.setBounds(10, 400, 649, 124);
 		frmCodeback.getContentPane().add(statusPanel);
 
 		JTextPane statusLabel = new JTextPane();
@@ -217,6 +260,9 @@ public class MainWindow {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		statusPanel.add(scrollPane,
 				BorderLayout.CENTER);
+		
+		
+		/////////////////////////////////////////
 
 		MessageConsole mc = new MessageConsole(statusLabel);
 		mc.redirectOut(Color.GREEN, null);
@@ -281,6 +327,8 @@ public class MainWindow {
 				"Also Fetch Problem statements");
 		chkProblem.setBounds(286, 113, 373, 23);
 		frmCodeback.getContentPane().add(chkProblem);
+		
+		////////////////////////// 
 
 		JButton btnInfo = new JButton("About");
 		btnInfo.addActionListener(new ActionListener() {
@@ -333,6 +381,13 @@ public class MainWindow {
 			}
 		});
 
+		chckbxProxy.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				Boolean status = ((JCheckBox) e.getSource()).isSelected();
+				panelProxy.setVisible(status);
+			}
+		});
+
 		btnDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// choose directory
@@ -358,10 +413,18 @@ public class MainWindow {
 				AppConfig.setOverWrite(chkOverwrite.isSelected());
 				AppConfig.setFetchProblem(chkProblem.isSelected());
 				AppConfig.setFetchAllAC(chkFetchAllAccepted.isSelected());
+				
 
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
+				Boolean proxyStatus = chckbxProxy.isSelected();
+				if(proxyStatus){
+					System.setProperty("http.proxyHost", proxyName.getText() );
+					System.setProperty("http.proxyPort", proxyPort.getText() );
+					System.setProperty("https.proxyHost", proxyName.getText() );
+					System.setProperty("https.proxyPort", proxyPort.getText() );
+				}
 				String msg = "";
 				String succesMsg = "";
 				String dir = txtDir.getText();
