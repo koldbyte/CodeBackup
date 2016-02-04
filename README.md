@@ -36,3 +36,4 @@ Credits: Used some idea from https://github.com/ideamonk/spojbackup for Spoj
 TODO::  
 1) For fetching code of Codeforces gym submissions, password is also required. So currently, no gym submissions will be downloaded.   
 2) Add check to verify if the handle is valid.  
+3) Add support to download submissions from other sites like HackerRank, HackerEarth etc.
