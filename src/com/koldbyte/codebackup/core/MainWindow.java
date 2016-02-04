@@ -64,16 +64,10 @@ public class MainWindow {
 					MainWindow window = new MainWindow();
 					window.frmCodeback.setVisible(true);
 					
-//					System.setProperty("http.proxyHost", "10.10.78.22");
-//					System.setProperty("http.proxyPort", "3128");
-//					System.setProperty("https.proxyHost", "10.10.78.22");
-//					System.setProperty("https.proxyPort", "3128");
-					
 					window.frmCodeback
 							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 				} catch (Exception e) {
 					System.err.println("Main: Error starting Application.");
-					// e.printStackTrace();
 				}
 			}
 		});
