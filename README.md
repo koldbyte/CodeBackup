@@ -42,9 +42,10 @@ TODO::
 
 
 
-Update 3 : Proxy Support is added. Now its has become easy for competitive programmers(mostly college students) to download codes behind their college proxies without setting it manually.
+**Update 3 :** 
+Proxy Support is added. Now its has become easy for competitive programmers(mostly college students) to download codes behind their college proxies without setting it manually.
 
-Features Added:
+*Features Added:*
 1) You can download codes by specifying proxy via a proxy server also
 
 
@@ -52,12 +53,10 @@ Features Added:
 ![](https://cloud.githubusercontent.com/assets/5080310/12817606/dd7515bc-cb78-11e5-850c-036510ff5170.png)
 
 
-
 [Download here v3 (.jar) ](https://github.com/devanshdalal/CodeBackup/releases/download/Codeback_v3/CodeBackup_v3.jar)
 
 
-
-Credits: Previous work done by Koldbyte and https://github.com/ideamonk/spojbackup.
+**Credits**: Previous work done by Koldbyte and https://github.com/ideamonk/spojbackup.
 
 TODO:
 
