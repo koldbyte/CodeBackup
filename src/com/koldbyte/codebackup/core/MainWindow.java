@@ -99,7 +99,7 @@ public class MainWindow {
 
 		frmCodeback = new JFrame();
 		frmCodeback.setResizable(false);
-		frmCodeback.setTitle("CodeBack v2 :: By Koldbyte (Bhaskar Divya)");
+		frmCodeback.setTitle("CodeBack v3");
 		frmCodeback.setBounds(100, 100, 675, 600);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
@@ -338,7 +338,9 @@ public class MainWindow {
 				msg += "5. Hit Run.\n";
 				msg += "\n";
 				msg += "CodeBack will save all the Codes and Problem Statement in following directory format :\n";
-				msg += "(Select Directory) / (Handle) / (ContestSite) / (PROBLEMNAME) / (PROBLEMNAME)-(SUBMISSIONID).(EXT)\n";
+				msg += "(Select Directory) / (Handle) / (ContestSite) / (PROBLEMNAME) / (PROBLEMNAME)-(SUBMISSIONID).(EXT)\n\n";
+				msg += "Feature added by Devansh Dalal( https://github.com/devanshdalal )\n";
+				msg += "UPDATE: new proxy feature added. You can download the codes via proxy now as well\n";
 
 				JOptionPane.showMessageDialog(frmCodeback, msg,
 						"About CodeBack", JOptionPane.INFORMATION_MESSAGE);
