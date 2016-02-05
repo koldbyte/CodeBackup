@@ -55,7 +55,7 @@ public class PersistHandler {
 		// TODO: Allow user to specify custom format for the final destination
 		String finalDestination = dir + sep + sub.getUser().getHandle() + sep
 				+ pluginName + sep + sub.getProblem().getProblemId() + sep;
-		String fileName = sub.getProblem().getProblemId() + "- Statement.html";
+		String fileName = sub.getProblem().getProblemId() + "-Statement.html";
 		File file = new File(finalDestination + fileName);
 		// now make sure whole path is created
 		file.getParentFile().mkdirs();
