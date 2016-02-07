@@ -2,6 +2,7 @@ package com.koldbyte.codebackup.core;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -30,6 +34,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import com.koldbyte.codebackup.core.entities.User;
 import com.koldbyte.codebackup.core.tools.MessageConsole;
 import com.koldbyte.codebackup.core.tools.PluginWorker;
@@ -37,10 +43,6 @@ import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
 import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
-
-import javax.swing.JPasswordField;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class MainWindow {
 
@@ -53,6 +55,7 @@ public class MainWindow {
 	private JTextField proxyPort;
 	private JTextField txtDir;
 	private ImageIcon progress;
+	private Map<String, String> backupSystemSettings;
 
 	/**
 	 * Launch the application.
@@ -100,14 +103,14 @@ public class MainWindow {
 		frmCodeback = new JFrame();
 		frmCodeback.setResizable(false);
 		frmCodeback.setTitle("CodeBack v3");
-		frmCodeback.setBounds(100, 100, 675, 600);
+		frmCodeback.setBounds(100, 100, 675, 519);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
 		frmCodeback.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				int confirmed = JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to exit the program?",
-						"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
+						"Confirm Exit", JOptionPane.YES_NO_OPTION);
 
 				if (confirmed == JOptionPane.YES_OPTION) {
 					frmCodeback.dispose();
@@ -115,7 +118,7 @@ public class MainWindow {
 			}
 		});
 		
-		////// Codechef options
+		////////////////////////// Codechef options
 		
 		final JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
@@ -165,7 +168,7 @@ public class MainWindow {
 		handleCodeforces.setBounds(94, 8, 145, 20);
 		panelCodeforces.add(handleCodeforces);
 		
-		//////////////////////////Spoj options
+		////////////////////////// Spoj options
 		
 		final JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
@@ -198,17 +201,24 @@ public class MainWindow {
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
 		
-		////////////////////// Proxy options
-		final JCheckBox chckbxProxy = new JCheckBox("proxy");
+		////////////////////////// Proxy options
+		
+		//Backup original proxy settings of the system
+		backupSystemSettings = new HashMap<String, String>();
+		backupSystemSettings.put("http.proxyHost", System.getProperty("http.proxyHost"));
+		backupSystemSettings.put("http.proxyPort", System.getProperty("http.proxyPort"));
+		backupSystemSettings.put("http.proxySet", System.getProperty("http.proxySet"));
+			
+		final JCheckBox chckbxProxy = new JCheckBox("Use Proxy");
 		chckbxProxy.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxProxy.setBounds(10, 274, 218, 23);
+		chckbxProxy.setBounds(286, 161, 218, 23);
 		frmCodeback.getContentPane().add(chckbxProxy);
 
 		final JPanel panelProxy = new JPanel();
 		panelProxy.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelProxy.setLayout(null);
-		panelProxy.setBounds(10, 305, 248, 73);
+		panelProxy.setBounds(296, 190, 248, 73);
 		frmCodeback.getContentPane().add(panelProxy);
 		panelProxy.setVisible(false);
 
@@ -230,11 +240,11 @@ public class MainWindow {
 		proxyPort.setBounds(94, 39, 145, 20);
 		panelProxy.add(proxyPort);
 		
-		///////////////////////////////////////
+		////////////////////////// Status Panel
 
 		JPanel statusPanel = new JPanel(new BorderLayout());
 		statusPanel.setToolTipText("Status");
-		statusPanel.setBounds(10, 400, 649, 124);
+		statusPanel.setBounds(10, 320, 649, 158);
 		frmCodeback.getContentPane().add(statusPanel);
 
 		JTextPane statusLabel = new JTextPane();
@@ -256,13 +266,14 @@ public class MainWindow {
 				BorderLayout.CENTER);
 		
 		
-		/////////////////////////////////////////
+		////////////////////////// Redirect out and Err to status label
 
 		MessageConsole mc = new MessageConsole(statusLabel);
 		mc.redirectOut(Color.GREEN, null);
 		mc.redirectErr(Color.RED, null);
 		// mc.redirectOut(null, System.out);
 
+		////////////////////////// Select Directory 
 		JLabel lblDirectory = new JLabel("Directory");
 		lblDirectory.setBounds(286, 15, 373, 14);
 		frmCodeback.getContentPane().add(lblDirectory);
@@ -280,7 +291,7 @@ public class MainWindow {
 
 		JButton btnRun = new JButton("Run");
 
-		btnRun.setBounds(339, 220, 123, 23);
+		btnRun.setBounds(385, 275, 111, 23);
 		frmCodeback.getContentPane().add(btnRun);
 
 		JButton btnExit = new JButton("Exit");
@@ -290,7 +301,7 @@ public class MainWindow {
 						WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		btnExit.setBounds(481, 220, 123, 23);
+		btnExit.setBounds(596, 275, 59, 23);
 		frmCodeback.getContentPane().add(btnExit);
 
 		URL url = this.getClass().getResource("/progress.gif");
@@ -319,10 +330,10 @@ public class MainWindow {
 
 		final JCheckBox chkProblem = new JCheckBox(
 				"Also Fetch Problem statements");
-		chkProblem.setBounds(286, 113, 373, 23);
+		chkProblem.setBounds(286, 111, 373, 23);
 		frmCodeback.getContentPane().add(chkProblem);
 		
-		////////////////////////// 
+		////////////////////////// Show a messageDialog on About click
 
 		JButton btnInfo = new JButton("About");
 		btnInfo.addActionListener(new ActionListener() {
@@ -346,16 +357,17 @@ public class MainWindow {
 						"About CodeBack", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		btnInfo.setBounds(426, 186, 89, 23);
+		btnInfo.setBounds(508, 275, 76, 23);
 		frmCodeback.getContentPane().add(btnInfo);
 
 		final JCheckBox chkFetchAllAccepted = new JCheckBox(
 				"Fetch All Accepted Submissions");
-		chkFetchAllAccepted.setBounds(286, 139, 373, 23);
+		chkFetchAllAccepted.setBounds(286, 138, 373, 23);
 		frmCodeback.getContentPane().add(chkFetchAllAccepted);
 		frmCodeback.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{chckbxCodechef, handleCodechef, chckbxCodeforces, handleCodeforces, chckbxSpoj, handleSpoj, passSpoj, lblDirectory, txtDir, btnDirectory, chkOverwrite, chkProblem, chkFetchAllAccepted, btnInfo, btnRun, btnExit, statusLabel, panelCodechef, lblHandle, panelCodeforces, label, panelSpoj, label_1, lblPass, statusPanel, scrollPane, statusLabel, progressCodechef, progressCodeforces, progressSpoj}));
 		progressSpoj.setVisible(false);
 
+		////////////////////////// Show hide options based on checkboxes
 		chckbxCodechef.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Boolean status = ((JCheckBox) e.getSource()).isSelected();
@@ -414,13 +426,21 @@ public class MainWindow {
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
+				
+				////////////////////////// Proxy settings
 				Boolean proxyStatus = chckbxProxy.isSelected();
 				if(proxyStatus){
+					System.setProperty("http.proxySet", "true");
 					System.setProperty("http.proxyHost", proxyName.getText() );
 					System.setProperty("http.proxyPort", proxyPort.getText() );
-					System.setProperty("https.proxyHost", proxyName.getText() );
-					System.setProperty("https.proxyPort", proxyPort.getText() );
+				}else{
+					//use original settings which were retrieved on the first run 
+					//It might be overwritten by the above code in previous runs
+					System.setProperty("http.proxySet", backupSystemSettings.get("http.proxySet"));
+					System.setProperty("http.proxyHost", backupSystemSettings.get("http.proxyHost") );
+					System.setProperty("http.proxyPort", backupSystemSettings.get("http.proxyPort") );
 				}
+				
 				String msg = "";
 				String succesMsg = "";
 				String dir = txtDir.getText();
