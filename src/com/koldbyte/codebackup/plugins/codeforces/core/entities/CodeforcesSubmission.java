@@ -21,19 +21,23 @@ public class CodeforcesSubmission extends Submission {
 		if (url == null || url.isEmpty()) {
 			url = getSubmissionUrlFromId();
 		}
+
 		try {
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Elements elem = doc.select("pre.program-source");
 			String code = elem.text();
-			setCode(code);
 
+			System.out.println("codeforces: fetched code " + submissionId);
+
+			setCode(code);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codeforces: Error Fetching code " + submissionId
+					+ " -> " + e.getMessage());
+			// e.printStackTrace();
 		}
 
 		return code;
@@ -41,7 +45,8 @@ public class CodeforcesSubmission extends Submission {
 
 	@Override
 	public String getSubmissionIdFromUrl() {
-		String submissionId = submissionUrl.substring(11 + submissionUrl.indexOf("submission/", 0));
+		String submissionId = submissionUrl.substring(11 + submissionUrl
+				.indexOf("submission/", 0));
 		return submissionId;
 	}
 
@@ -50,14 +55,18 @@ public class CodeforcesSubmission extends Submission {
 		String contestId = problem.getProblemId();
 		String submissionUrl;
 		if (contestId.length() > 3) {
-			submissionUrl = GYMSUBMISSIONURL.replace(":c", contestId.toString()).replace(":s", submissionId);
+			submissionUrl = GYMSUBMISSIONURL
+					.replace(":c", contestId.toString()).replace(":s",
+							submissionId);
 		} else {
-			submissionUrl = SUBMISSIONURL.replace(":c", contestId.toString()).replace(":s", submissionId);
+			submissionUrl = SUBMISSIONURL.replace(":c", contestId.toString())
+					.replace(":s", submissionId);
 		}
 		return submissionUrl;
 	}
 
-	public CodeforcesSubmission(String submissionId, String submissionUrl, Problem problem, User user) {
+	public CodeforcesSubmission(String submissionId, String submissionUrl,
+			Problem problem, User user) {
 		super(submissionId, submissionUrl, problem, user);
 	}
 

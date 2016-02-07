@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.koldbyte.codebackup.core.entities.Problem;
-import com.koldbyte.codebackup.core.tools.Logger;
 
 public class CodechefProblem extends Problem {
 	private final String HTTP = "http://";
@@ -31,16 +30,23 @@ public class CodechefProblem extends Problem {
 		 * 	</div>
 		 */
 		Document doc;
+
 		try {
 			String u = getUrl();
-			doc = Jsoup.connect(u).get();
-			Elements problems = doc.getElementsByClass("primary-colum-width-left");
+			doc = Jsoup.connect(u).timeout(10000).get();
+
+			Elements problems = doc
+					.getElementsByClass("primary-colum-width-left");
+
 			this.setProblemStatement(problems.html());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codechef: Error fetching Problem Statement "
+					+ problemId + " -> " + e.getMessage());
+			// e.printStackTrace();
 		}
-		new Logger().getInstance().addStatus("codechef: fetched problem " + problemId);
+
+		System.out.println("codechef: fetched problem " + problemId);
+
 		return this.problemStatement;
 	}
 

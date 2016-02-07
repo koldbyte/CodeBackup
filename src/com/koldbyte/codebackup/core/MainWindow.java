@@ -1,17 +1,18 @@
 package com.koldbyte.codebackup.core;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Window.Type;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,17 +22,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import com.koldbyte.codebackup.core.entities.User;
-import com.koldbyte.codebackup.core.tools.Logger;
-import com.koldbyte.codebackup.core.tools.PluginRunnable;
+import com.koldbyte.codebackup.core.tools.MessageConsole;
+import com.koldbyte.codebackup.core.tools.PluginWorker;
 import com.koldbyte.codebackup.plugins.PluginEnum;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefUser;
 import com.koldbyte.codebackup.plugins.codeforces.core.entities.CodeforcesUser;
@@ -43,9 +50,12 @@ public class MainWindow {
 	private JTextField handleCodechef;
 	private JTextField handleCodeforces;
 	private JTextField handleSpoj;
-	private JTextField passSpoj;
+	private JPasswordField passSpoj;
+	private JTextField proxyName;
+	private JTextField proxyPort;
 	private JTextField txtDir;
 	private ImageIcon progress;
+	private Map<String, String> backupSystemSettings;
 
 	/**
 	 * Launch the application.
@@ -56,9 +66,11 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frmCodeback.setVisible(true);
-
+					
+					window.frmCodeback
+							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.err.println("Main: Error starting Application.");
 				}
 			}
 		});
@@ -72,88 +84,49 @@ public class MainWindow {
 	}
 
 	/**
-	 * Converts a given Image into a BufferedImage
-	 *
-	 * @param img
-	 *            The Image to be converted
-	 * @return The converted BufferedImage
-	 */
-	public static BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
-		}
-
-		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null),
-				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		// Draw the image on to the buffered image
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-
-		// Return the buffered image
-		return bimage;
-	}
-
-	public static BufferedImage resize(BufferedImage image, int width,
-			int height) {
-		BufferedImage bi = new BufferedImage(width, height,
-				BufferedImage.TRANSLUCENT);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
-		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY));
-		g2d.drawImage(image, 0, 0, width, height, null);
-		g2d.dispose();
-		return bi;
-	}
-
-	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		progress = new ImageIcon(this.getClass().getResource("/progress.gif"));
 
 		frmCodeback = new JFrame();
-		frmCodeback.setType(Type.UTILITY);
 		frmCodeback.setResizable(false);
-		frmCodeback.setTitle("CodeBack");
-		frmCodeback.setBounds(100, 100, 284, 519);
+		frmCodeback.setTitle("CodeBack v3");
+		frmCodeback.setBounds(100, 100, 675, 519);
 		frmCodeback.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCodeback.getContentPane().setLayout(null);
 		frmCodeback.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				int confirmed = JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to exit the program?",
-						"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
+						"Confirm Exit", JOptionPane.YES_NO_OPTION);
 
 				if (confirmed == JOptionPane.YES_OPTION) {
 					frmCodeback.dispose();
 				}
 			}
 		});
-		JCheckBox chckbxCodechef = new JCheckBox("Codechef");
+		
+		////////////////////////// Codechef options
+		
+		final JCheckBox chckbxCodechef = new JCheckBox("Codechef");
 		chckbxCodechef.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodechef.setBounds(10, 7, 213, 23);
+		chckbxCodechef.setBounds(10, 7, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodechef);
 
-		JPanel panelCodechef = new JPanel();
+		final JPanel panelCodechef = new JPanel();
 		panelCodechef.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 		panelCodechef.setBounds(10, 36, 248, 41);
@@ -166,17 +139,19 @@ public class MainWindow {
 		panelCodechef.add(lblHandle);
 
 		handleCodechef = new JTextField();
-		handleCodechef.setBounds(102, 8, 135, 20);
+		handleCodechef.setBounds(94, 8, 145, 20);
 		panelCodechef.add(handleCodechef);
 		handleCodechef.setColumns(10);
-
-		JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
+		
+		////////////////////////// Codeforces options
+		
+		final JCheckBox chckbxCodeforces = new JCheckBox("Codeforces");
 		chckbxCodeforces.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxCodeforces.setBounds(10, 84, 213, 23);
+		chckbxCodeforces.setBounds(10, 84, 218, 23);
 		frmCodeback.getContentPane().add(chckbxCodeforces);
 
-		JPanel panelCodeforces = new JPanel();
+		final JPanel panelCodeforces = new JPanel();
 		panelCodeforces.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 		panelCodeforces.setLayout(null);
@@ -190,16 +165,18 @@ public class MainWindow {
 
 		handleCodeforces = new JTextField();
 		handleCodeforces.setColumns(10);
-		handleCodeforces.setBounds(107, 8, 135, 20);
+		handleCodeforces.setBounds(94, 8, 145, 20);
 		panelCodeforces.add(handleCodeforces);
-
-		JCheckBox chckbxSpoj = new JCheckBox("Spoj");
+		
+		////////////////////////// Spoj options
+		
+		final JCheckBox chckbxSpoj = new JCheckBox("Spoj");
 		chckbxSpoj.setHorizontalAlignment(SwingConstants.LEFT);
 
-		chckbxSpoj.setBounds(10, 161, 213, 23);
+		chckbxSpoj.setBounds(10, 161, 218, 23);
 		frmCodeback.getContentPane().add(chckbxSpoj);
 
-		JPanel panelSpoj = new JPanel();
+		final JPanel panelSpoj = new JPanel();
 		panelSpoj.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelSpoj.setLayout(null);
 		panelSpoj.setBounds(10, 190, 248, 73);
@@ -207,51 +184,114 @@ public class MainWindow {
 		panelSpoj.setVisible(false);
 
 		JLabel label_1 = new JLabel("Handle");
-		label_1.setBounds(10, 11, 46, 14);
+		label_1.setBounds(10, 11, 74, 14);
 		panelSpoj.add(label_1);
 
 		handleSpoj = new JTextField();
 		handleSpoj.setColumns(10);
-		handleSpoj.setBounds(66, 8, 171, 20);
+		handleSpoj.setBounds(94, 8, 145, 20);
 		panelSpoj.add(handleSpoj);
 
 		JLabel lblPass = new JLabel("Pass");
-		lblPass.setBounds(10, 40, 46, 14);
+		lblPass.setBounds(10, 40, 74, 14);
 		panelSpoj.add(lblPass);
 
-		passSpoj = new JTextField();
-		passSpoj.setBounds(66, 39, 171, 20);
+		passSpoj = new JPasswordField();
+		passSpoj.setBounds(94, 39, 145, 20);
 		panelSpoj.add(passSpoj);
 		passSpoj.setColumns(10);
-
-		JLabel statusLabel = new JLabel();
-		statusLabel
-				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		statusLabel.setToolTipText("Status");
-		statusLabel.setBounds(10, 365, 248, 105);
-		frmCodeback.getContentPane().add(statusLabel);
-
-		//Attach the status Label with the logStatus Singleton
-		new Logger().getInstance().statusLabel = statusLabel;
 		
+		////////////////////////// Proxy options
+		
+		//Backup original proxy settings of the system
+		backupSystemSettings = new HashMap<String, String>();
+		backupSystemSettings.put("http.proxyHost", System.getProperty("http.proxyHost"));
+		backupSystemSettings.put("http.proxyPort", System.getProperty("http.proxyPort"));
+		backupSystemSettings.put("http.proxySet", System.getProperty("http.proxySet"));
+			
+		final JCheckBox chckbxProxy = new JCheckBox("Use Proxy");
+		chckbxProxy.setHorizontalAlignment(SwingConstants.LEFT);
+
+		chckbxProxy.setBounds(286, 161, 218, 23);
+		frmCodeback.getContentPane().add(chckbxProxy);
+
+		final JPanel panelProxy = new JPanel();
+		panelProxy.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelProxy.setLayout(null);
+		panelProxy.setBounds(296, 190, 248, 73);
+		frmCodeback.getContentPane().add(panelProxy);
+		panelProxy.setVisible(false);
+
+		JLabel labelName = new JLabel("Proxy");
+		labelName.setBounds(10, 11, 74, 14);
+		panelProxy.add(labelName);
+		
+		proxyName = new JTextField();
+		proxyName.setColumns(10);
+		proxyName.setBounds(94, 8, 145, 20);
+		panelProxy.add(proxyName);
+		
+		JLabel labelPort = new JLabel("Port");
+		labelPort.setBounds(10, 40, 74, 14);
+		panelProxy.add(labelPort);
+		
+		proxyPort = new JTextField();
+		proxyPort.setColumns(10);
+		proxyPort.setBounds(94, 39, 145, 20);
+		panelProxy.add(proxyPort);
+		
+		////////////////////////// Status Panel
+
+		JPanel statusPanel = new JPanel(new BorderLayout());
+		statusPanel.setToolTipText("Status");
+		statusPanel.setBounds(10, 320, 649, 158);
+		frmCodeback.getContentPane().add(statusPanel);
+
+		JTextPane statusLabel = new JTextPane();
+		statusLabel.setBackground(Color.DARK_GRAY);
+		statusLabel.setForeground(Color.BLACK);
+		statusLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
+		statusLabel.setBounds(10, 274, 620, 124);
+		statusLabel.setEditable(false);
+		statusLabel.setSize(620, 124);
+		// statusLabel.setLineWrap(true);
+		// statusLabel.setRows(6);
+		// statusLabel.setColumns(78);
+		statusPanel.add(statusLabel);
+
+		JScrollPane scrollPane = new JScrollPane(statusLabel,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		statusPanel.add(scrollPane,
+				BorderLayout.CENTER);
+		
+		
+		////////////////////////// Redirect out and Err to status label
+
+		MessageConsole mc = new MessageConsole(statusLabel);
+		mc.redirectOut(Color.GREEN, null);
+		mc.redirectErr(Color.RED, null);
+		// mc.redirectOut(null, System.out);
+
+		////////////////////////// Select Directory 
 		JLabel lblDirectory = new JLabel("Directory");
-		lblDirectory.setBounds(10, 273, 60, 14);
+		lblDirectory.setBounds(286, 15, 373, 14);
 		frmCodeback.getContentPane().add(lblDirectory);
 
 		txtDir = new JTextField();
 		txtDir.setEditable(false);
 		txtDir.setColumns(10);
-		txtDir.setBounds(80, 270, 129, 20);
+		txtDir.setBounds(286, 37, 324, 20);
 		frmCodeback.getContentPane().add(txtDir);
 
 		JButton btnDirectory = new JButton("\u00BB");
 
-		btnDirectory.setBounds(219, 269, 39, 23);
+		btnDirectory.setBounds(620, 36, 39, 23);
 		frmCodeback.getContentPane().add(btnDirectory);
 
 		JButton btnRun = new JButton("Run");
 
-		btnRun.setBounds(10, 301, 248, 23);
+		btnRun.setBounds(385, 275, 111, 23);
 		frmCodeback.getContentPane().add(btnRun);
 
 		JButton btnExit = new JButton("Exit");
@@ -261,30 +301,73 @@ public class MainWindow {
 						WindowEvent.WINDOW_CLOSING));
 			}
 		});
-		btnExit.setBounds(10, 331, 248, 23);
+		btnExit.setBounds(596, 275, 59, 23);
 		frmCodeback.getContentPane().add(btnExit);
 
 		URL url = this.getClass().getResource("/progress.gif");
 		ImageIcon progressIcon = new ImageIcon(url);
 
-		JLabel progressCodechef = new JLabel();
+		final JLabel progressCodechef = new JLabel();
 		progressCodechef.setBounds(234, 7, 24, 24);
 		progressCodechef.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressCodechef);
 		progressCodechef.setVisible(false);
 
-		JLabel progressCodeforces = new JLabel();
+		final JLabel progressCodeforces = new JLabel();
 		progressCodeforces.setBounds(234, 83, 24, 24);
 		progressCodeforces.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressCodeforces);
 		progressCodeforces.setVisible(false);
 
-		JLabel progressSpoj = new JLabel();
+		final JLabel progressSpoj = new JLabel();
 		progressSpoj.setBounds(234, 160, 24, 24);
 		progressSpoj.setIcon(progressIcon);
 		frmCodeback.getContentPane().add(progressSpoj);
+
+		final JCheckBox chkOverwrite = new JCheckBox("Overwrite if Code Exist");
+		chkOverwrite.setBounds(286, 84, 373, 23);
+		frmCodeback.getContentPane().add(chkOverwrite);
+
+		final JCheckBox chkProblem = new JCheckBox(
+				"Also Fetch Problem statements");
+		chkProblem.setBounds(286, 111, 373, 23);
+		frmCodeback.getContentPane().add(chkProblem);
+		
+		////////////////////////// Show a messageDialog on About click
+
+		JButton btnInfo = new JButton("About");
+		btnInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String msg = "CodeBack - Developed by Koldbyte (Bhaskar Divya)\n";
+				msg += "CodeBack is a tool to backup all your code submissions on contest sites - Spoj, Codeforces and Codechef.\n\n";
+				msg += "GITHUB : https://github.com/koldbyte/CodeBackup\n\n";
+				msg += "How to use it?\n\n";
+				msg += "1. Enable the checkboxes for which you want to fetch submissions.\n";
+				msg += "2. Enter your handle(username) registered on the website.\n";
+				msg += "3. Select a directory where you want to save the codes\n";
+				msg += "4, Select other options as required.\n";
+				msg += "5. Hit Run.\n";
+				msg += "\n";
+				msg += "CodeBack will save all the Codes and Problem Statement in following directory format :\n";
+				msg += "(Select Directory) / (Handle) / (ContestSite) / (PROBLEMNAME) / (PROBLEMNAME)-(SUBMISSIONID).(EXT)\n\n";
+				msg += "Feature added by Devansh Dalal( https://github.com/devanshdalal )\n";
+				msg += "UPDATE: new proxy feature added. You can download the codes via proxy now as well\n";
+
+				JOptionPane.showMessageDialog(frmCodeback, msg,
+						"About CodeBack", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		btnInfo.setBounds(508, 275, 76, 23);
+		frmCodeback.getContentPane().add(btnInfo);
+
+		final JCheckBox chkFetchAllAccepted = new JCheckBox(
+				"Fetch All Accepted Submissions");
+		chkFetchAllAccepted.setBounds(286, 138, 373, 23);
+		frmCodeback.getContentPane().add(chkFetchAllAccepted);
+		frmCodeback.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{chckbxCodechef, handleCodechef, chckbxCodeforces, handleCodeforces, chckbxSpoj, handleSpoj, passSpoj, lblDirectory, txtDir, btnDirectory, chkOverwrite, chkProblem, chkFetchAllAccepted, btnInfo, btnRun, btnExit, statusLabel, panelCodechef, lblHandle, panelCodeforces, label, panelSpoj, label_1, lblPass, statusPanel, scrollPane, statusLabel, progressCodechef, progressCodeforces, progressSpoj}));
 		progressSpoj.setVisible(false);
 
+		////////////////////////// Show hide options based on checkboxes
 		chckbxCodechef.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				Boolean status = ((JCheckBox) e.getSource()).isSelected();
@@ -306,6 +389,13 @@ public class MainWindow {
 			}
 		});
 
+		chckbxProxy.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				Boolean status = ((JCheckBox) e.getSource()).isSelected();
+				panelProxy.setVisible(status);
+			}
+		});
+
 		btnDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// choose directory
@@ -324,16 +414,38 @@ public class MainWindow {
 
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Disable the run button for now
+				// Disable the run button for now
 				((JButton) e.getSource()).setEnabled(false);
+
+				// Initialize Appconfig
+				AppConfig.setOverWrite(chkOverwrite.isSelected());
+				AppConfig.setFetchProblem(chkProblem.isSelected());
+				AppConfig.setFetchAllAC(chkFetchAllAccepted.isSelected());
+				
+
 				Boolean codechefStatus = chckbxCodechef.isSelected();
 				Boolean codeforcesStatus = chckbxCodeforces.isSelected();
 				Boolean spojStatus = chckbxSpoj.isSelected();
+				
+				////////////////////////// Proxy settings
+				Boolean proxyStatus = chckbxProxy.isSelected();
+				if(proxyStatus){
+					System.setProperty("http.proxySet", "true");
+					System.setProperty("http.proxyHost", proxyName.getText() );
+					System.setProperty("http.proxyPort", proxyPort.getText() );
+				}else{
+					//use original settings which were retrieved on the first run 
+					//It might be overwritten by the above code in previous runs
+					System.setProperty("http.proxySet", backupSystemSettings.get("http.proxySet"));
+					System.setProperty("http.proxyHost", backupSystemSettings.get("http.proxyHost") );
+					System.setProperty("http.proxyPort", backupSystemSettings.get("http.proxyPort") );
+				}
+				
 				String msg = "";
 				String succesMsg = "";
 				String dir = txtDir.getText();
 				if (dir == null || dir.isEmpty()) {
-					msg += "Please provide a output Directory.\n";
+					msg += "Please provide an output Directory.\n";
 				} else {
 					/*
 					 * Check for codechef
@@ -345,15 +457,15 @@ public class MainWindow {
 						} else {
 							User user = new CodechefUser(codechefHandle);
 							if (!user.isValidUser()) {
-								msg += "Provided Codechef handle is invalid.\n";
+								msg += "Entered Codechef handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.CODECHEF);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.CODECHEF,
+										progressCodechef);
 								progressCodechef.setIcon(progress);
 								progressCodechef.setVisible(true);
-								// Run in the new Thread
-								// TODO:
-								runnable.run();
+
+								runnable.execute();
 							}
 						}
 					}
@@ -368,15 +480,15 @@ public class MainWindow {
 						} else {
 							User user = new CodeforcesUser(codeforceHandle);
 							if (!user.isValidUser()) {
-								msg += "Provided Codeforces handle is invalid.\n";
+								msg += "Entered Codeforces handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.CODEFORCES);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.CODEFORCES,
+										progressCodeforces);
 								progressCodeforces.setIcon(progress);
 								progressCodeforces.setVisible(true);
-								// Run in the new Thread
-								// TODO:
-								runnable.run();
+
+								runnable.execute();
 							}
 						}
 					}
@@ -385,25 +497,25 @@ public class MainWindow {
 					 * Check for Spoj
 					 */
 					if (spojStatus) {
-						String spojHandle = handleCodeforces.getText();
-						String spojPass = passSpoj.getText();
+						String spojHandle = handleSpoj.getText();
+						String spojPass = String.valueOf(passSpoj.getPassword());
 						if (spojHandle == null || spojHandle.isEmpty()) {
 							msg += "Please provide a Spoj handle.\n";
 						} else if (spojPass == null || spojPass.isEmpty()) {
-							msg += "Please provide pass for the Spoj handle.\n";
+							msg += "Please provide password for the Spoj handle.\n";
 						} else {
 							User user = new SpojUser(spojHandle);
+							((SpojUser) user).setUsername(spojHandle);
 							((SpojUser) user).setPass(spojPass);
 							if (!user.isValidUser()) {
-								msg += "Provided Codeforces handle is invalid.\n";
+								msg += "Entered Spoj handle is invalid.\n";
 							} else {
-								PluginRunnable runnable = new PluginRunnable(
-										dir, user, PluginEnum.SPOJ);
+								PluginWorker runnable = new PluginWorker(dir,
+										user, PluginEnum.SPOJ, progressSpoj);
 								progressSpoj.setIcon(progress);
 								progressSpoj.setVisible(true);
-								// Run in the new Thread
-								// TODO:
-								runnable.run();
+
+								runnable.execute();
 							}
 						}
 					}
@@ -416,8 +528,8 @@ public class MainWindow {
 					JOptionPane.showMessageDialog(frmCodeback, succesMsg,
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 				}
-				
-				//Reenable the run button
+
+				// Reenable the run button
 				((JButton) e.getSource()).setEnabled(true);
 			}
 		});

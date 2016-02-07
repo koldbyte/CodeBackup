@@ -10,6 +10,8 @@ public class HTTPRequest {
 	private String userAgent = "Mozilla/5.0";
 	private String url = "http://www.google.com/search?q=mkyong";
 	private String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+	private int connectTimeout = 10000;
+	private int socketTimeout = 10000;
 
 	public HTTPRequest(String userAgent, String url, String urlParameters) {
 		super();
@@ -49,10 +51,13 @@ public class HTTPRequest {
 	}
 
 	// HTTP GET request
-	public StringBuffer sendGet() throws Exception {
-
+	public StringBuffer sendGet() throws Exception {		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// set Timeouts
+		con.setConnectTimeout(connectTimeout);
+		con.setReadTimeout(socketTimeout);
 
 		// optional default is GET
 		con.setRequestMethod("GET");
@@ -60,11 +65,12 @@ public class HTTPRequest {
 		// add request header
 		con.setRequestProperty("User-Agent", userAgent);
 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+		// int responseCode = con.getResponseCode();
+		// System.out.println("\nSending 'GET' request to URL : " + url);
+		// System.out.println("Response Code : " + responseCode);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
@@ -74,15 +80,20 @@ public class HTTPRequest {
 		in.close();
 
 		// print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
 
 		return response;
 	}
 
 	// HTTP POST request
 	public StringBuffer sendPost() throws Exception {
+				
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// set Timeouts
+		con.setConnectTimeout(connectTimeout);
+		con.setReadTimeout(socketTimeout);
 
 		// add request header
 		con.setRequestMethod("POST");
@@ -96,12 +107,13 @@ public class HTTPRequest {
 		wr.flush();
 		wr.close();
 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + urlParameters);
-		System.out.println("Response Code : " + responseCode);
+		// int responseCode = con.getResponseCode();
+		// System.out.println("\nSending 'POST' request to URL : " + url);
+		// System.out.println("Post parameters : " + urlParameters);
+		// System.out.println("Response Code : " + responseCode);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
@@ -110,8 +122,6 @@ public class HTTPRequest {
 		}
 		in.close();
 
-		// print result
-		System.out.println(response.toString());
 
 		return response;
 	}

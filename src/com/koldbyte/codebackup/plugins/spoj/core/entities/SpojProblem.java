@@ -26,17 +26,22 @@ public class SpojProblem extends Problem {
 		 */
 
 		Document doc;
+
 		try {
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(url).timeout(10000).get();
+
 			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
 
 			Element problemBody = doc.getElementById("problem-body");
-			this.setProblemStatement(problemBody.html());
 
+			System.out.println("spoj: fetched problem " + problemId);
+
+			this.setProblemStatement(problemBody.html());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("spoj: Error fetching Problem Statement "
+					+ problemId + " -> " + e.getMessage());
+			// e.printStackTrace();
 		}
 
 		return this.problemStatement;

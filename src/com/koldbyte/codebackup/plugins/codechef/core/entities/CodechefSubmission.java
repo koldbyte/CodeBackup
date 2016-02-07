@@ -7,7 +7,6 @@ import org.jsoup.nodes.Entities.EscapeMode;
 import com.koldbyte.codebackup.core.entities.Problem;
 import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
-import com.koldbyte.codebackup.core.tools.Logger;
 
 public class CodechefSubmission extends Submission {
 
@@ -23,18 +22,22 @@ public class CodechefSubmission extends Submission {
 	public String fetchSubmittedCode() {
 		String subUrl = getSubmissionUrl();
 		String code = "";
+
 		try {
-			Document doc = Jsoup.connect(subUrl).get();
-			
-			//remove html entities from the code
+			Document doc = Jsoup.connect(subUrl).timeout(10000).get();
+
+			// remove html entities from the code
 			doc.outputSettings().escapeMode(EscapeMode.xhtml);
-			
+
 			code = doc.select("pre").text();
-			new Logger().getInstance().addStatus("codechef: fetched code " + submissionId);
+
+			System.out.println("codechef: fetched code " + submissionId);
+
 			setCode(code.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("codechef: Error Fetching code " + submissionId
+					+ " -> " + e.getMessage());
+			// e.printStackTrace();
 		}
 
 		return code.toString();
@@ -46,7 +49,9 @@ public class CodechefSubmission extends Submission {
 		String url = submissionUrl;
 		url = url.replace(HTTP, "");
 		url = url.replace(SOLUTIONURLPREFIX, "");
+
 		this.submissionId = url;
+
 		return url;
 	}
 
