@@ -430,15 +430,18 @@ public class MainWindow {
 				////////////////////////// Proxy settings
 				Boolean proxyStatus = chckbxProxy.isSelected();
 				if(proxyStatus){
-					System.setProperty("http.proxySet", "true");
+					//System.setProperty("http.proxySet", "true");
 					System.setProperty("http.proxyHost", proxyName.getText() );
 					System.setProperty("http.proxyPort", proxyPort.getText() );
 				}else{
 					//use original settings which were retrieved on the first run 
 					//It might be overwritten by the above code in previous runs
-					System.setProperty("http.proxySet", backupSystemSettings.get("http.proxySet"));
-					System.setProperty("http.proxyHost", backupSystemSettings.get("http.proxyHost") );
-					System.setProperty("http.proxyPort", backupSystemSettings.get("http.proxyPort") );
+					if(backupSystemSettings.get("http.proxySet") != null)
+						System.setProperty("http.proxySet", backupSystemSettings.get("http.proxySet"));
+					if(backupSystemSettings.get("http.proxyHost") != null)
+						System.setProperty("http.proxyHost", backupSystemSettings.get("http.proxyHost") );
+					if(backupSystemSettings.get("http.proxyPort") != null)
+						System.setProperty("http.proxyPort", backupSystemSettings.get("http.proxyPort") );
 				}
 				
 				String msg = "";
