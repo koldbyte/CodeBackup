@@ -18,179 +18,113 @@ import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefProblem;
 import com.koldbyte.codebackup.plugins.codechef.core.entities.CodechefSubmission;
 
 public class CodechefPluginImpl implements PluginInterface {
-	private final String LISTPAGE = "http://www.codechef.com/users/";
+    private static final String PROBLEMS_SOLVED_CONTAINER_DIV_CLASS = "problems-solved";
+    private static final String LISTPAGE = "http://www.codechef.com/users/";
 
-	public List<Submission> getSolvedList(User user) {
-		String url = LISTPAGE + user.getHandle();
-		ArrayList<Submission> submissions = new ArrayList<Submission>();
+    @Override
+    public List<Submission> getSolvedList(User user) {
+        return fetchSubmissionsPrivate(user, false);
+    }
 
-		try {
+    @Override
+    public List<Submission> getAllSolvedList(User user) {
+        return fetchSubmissionsPrivate(user, true);
+    }
 
-			// fetch the main page
-			Document doc = Jsoup.connect(url).timeout(10000).get();
+    private List<Submission> fetchSubmissionsPrivate(User user, Boolean fetchAll) {
+        String url = LISTPAGE + user.getHandle();
+        ArrayList<Submission> submissions = new ArrayList<Submission>();
 
-			// fetch the div which contains the list of solved problems
-			Elements elems = doc.getElementsByClass("profile");
-			Elements links = elems.select("a[href]");
+        try {
 
-			System.out.println("codechef: Found " + links.size()
-					+ " Problems linked in your profile page");
+            // fetch the main page
+            Document doc = Jsoup.connect(url).timeout(10000).get();
 
-			for (Element link : links) {
-				
-				try {
-					String linkurl = link.attr("abs:href");
+            // fetch the div which contains the list of solved problems
+            Elements elems = doc.getElementsByClass(PROBLEMS_SOLVED_CONTAINER_DIV_CLASS);
+            Elements links = elems.select("a[href]");
 
-					if (linkurl.contains("status")) {
-						String problemId = link.text();
-						Problem problem = new CodechefProblem(problemId, "");
+            System.out.println("codechef: Found " + links.size()
+                    + " Problems linked in your profile page");
 
-						// if it is a proper "status" page, fetch this page
-						Document page = Jsoup.connect(linkurl).get();
+            for (Element link : links) {
 
-						Elements rows = page.select(".kol");
+                try {
+                    String linkurl = link.attr("abs:href");
 
-						// loop through the rows to find the first Accepted
-						// submissions
-						for (Element tr : rows) {
+                    if (linkurl.contains("status")) {
+                        System.out.println("Processing: " + linkurl);
 
-							Elements tds = tr.getElementsByTag("td");
-							
-							//TODO: Add a check to stop processing when encountering "No Recent Activity"
-							if(!tds.text().contains("No Recent Activity")){
-								
-								String result = tds.get(3).select("img").get(0)
-										.attr("src");
-		
-								if (result.contains("tick")) { // is a accepted solution
-									String id = tds.get(0).text();
-									String time = tds.get(1).text();
-									String lang = tds.get(6).text();
-		
-									String solUrl = tds.get(7).select("a[href]")
-											.attr("abs:href");
-									// the solUrl is of pattern
-									// http://www.codechef.com/viewsolution/2078521
-									// It should be
-									// http://www.codechef.com/viewplaintext/2078521
-									solUrl = solUrl.replace("viewsolution",
-											"viewplaintext");
-		
-									Submission sub = new CodechefSubmission(id, solUrl,
-											problem, user);
-		
-									sub.setLanguage(LanguagesEnum.findExtension(lang));
-									sub.setTimestamp(time);
-		
-									submissions.add(sub);
-		
-									// We have found the AC submission for the current
-									// problem
-									// break now from the for loop to avoid adding more
-									// submissions of the same problem.
-		
-									break;
-								}
-							}
-						}
-					}
-				} catch (Exception e) {
-					System.err.println("codechef: Error fetching list.." + " -> "
-							+ e.getMessage()+" fetching next");
-				}
-				
-			}
+                        String problemId = link.text();
+                        Problem problem = new CodechefProblem(problemId, "");
 
-		} catch (IOException e) {
-			System.err.println("codechef: Error fetching list.." + " -> "
-					+ e.getMessage());
-			// e.printStackTrace();
-		}
-		System.out.println("codechef: Found " + submissions.size()
-				+ " Submissions");
+                        // if it is a proper "status" page, fetch this page
+                        Document page = Jsoup.connect(linkurl).get();
 
-		return submissions;
-	}
+                        Elements rows = page.getElementsByAttributeValueContaining("class", "kol");//page.select(".\"kol\"");
 
-	@Override
-	public List<Submission> getAllSolvedList(User user) {
-		String url = LISTPAGE + user.getHandle();
-		ArrayList<Submission> submissions = new ArrayList<Submission>();
+                        // loop through the rows to find the first Accepted
+                        // submissions
+                        int count = 0;
+                        for (Element tr : rows) {
+                            Elements tds = tr.getElementsByTag("td");
 
-		try {
-			// fetch the main page
-			Document doc = Jsoup.connect(url).timeout(10000).get();
+                            //TODO: Add a check to stop processing when encountering "No Recent Activity"
+                            if (!tds.text().contains("No Recent Activity")) {
 
-			// fetch the div which contains the list of solved problems
-			Elements elems = doc.getElementsByClass("profile");
+                                String result = tds.get(3).select("img").get(0)
+                                        .attr("src");
 
-			Elements links = elems.select("a[href]");
+                                if (result.contains("tick")) { // is a accepted solution
+                                    String id = tds.get(0).text();
+                                    String time = tds.get(1).text();
+                                    String lang = tds.get(6).text();
 
-			System.out.println("codechef: Found " + links.size()
-					+ " Problems linked in your profile page");
+                                    String solUrl = tds.get(7).select("a[href]")
+                                            .attr("abs:href");
+                                    // the solUrl is of pattern
+                                    // http://www.codechef.com/viewsolution/2078521
+                                    // It should be
+                                    // http://www.codechef.com/viewplaintext/2078521
+                                    solUrl = solUrl.replace("viewsolution",
+                                            "viewplaintext");
 
-			for (Element link : links) {
-				
-				try {
-					String linkurl = link.attr("abs:href");
+                                    Submission sub = new CodechefSubmission(id, solUrl,
+                                            problem, user);
 
-					if (linkurl.contains("status")) {
-						String problemId = link.text();
-						Problem problem = new CodechefProblem(problemId, "");
+                                    sub.setLanguage(LanguagesEnum.findExtension(lang));
+                                    sub.setTimestamp(time);
 
-						// if it is a proper "status" page
-						// fetch this page
-						Document page = Jsoup.connect(linkurl).get();
-						Elements rows = page.select(".kol");
+                                    submissions.add(sub);
+                                    count++;
 
-						for (Element tr : rows) {
-							// Element tr = page.select(".kol").get(0);
-							Elements tds = tr.getElementsByTag("td");
+                                    if (!fetchAll) {
+                                        // We have found the AC submission for the current
+                                        // problem break now from the for loop to avoid
+                                        // adding more submissions of the same problem.
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        //System.out.println("Fetch " + count + " AC solutions.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Codechef: Error fetching Problem solution. Error: "
+                            + e.getMessage() + ". Continuing processing next.");
+                }
 
-							//TODO: Add a check to stop processing when encountering "No Recent Activity"
-							if(!tds.text().contains("No Recent Activity")){
-							
-								String result = tds.get(3).select("img").get(0)
-										.attr("src");
-								if (result.contains("tick")) { // is a accepted solution
-									String id = tds.get(0).text();
-									String time = tds.get(1).text();
-									String lang = tds.get(6).text();
-		
-									String solUrl = tds.get(7).select("a[href]")
-											.attr("abs:href");
-									// the solUrl is of pattern
-									// http://www.codechef.com/viewsolution/2078521
-									// It should be
-									// http://www.codechef.com/viewplaintext/2078521
-									solUrl = solUrl.replace("viewsolution",
-											"viewplaintext");
-		
-									Submission sub = new CodechefSubmission(id, solUrl,
-											problem, user);
-		
-									sub.setLanguage(LanguagesEnum.findExtension(lang));
-									sub.setTimestamp(time);
-		
-									submissions.add(sub);
-								}
-							}
-						}
-					}
-					
-				} catch (Exception e) {
-					System.err.println("codechef: Error fetching list." + " -> "
-							+ e.getMessage()+" : fetching next");
-				}
-			}
+            }
 
-		} catch (IOException e) {
-			System.err.println("codechef: Error fetching list." + " -> "
-					+ e.getMessage());
-			// e.printStackTrace();
-		}
-		System.out.println("codechef: Found " + submissions.size()
-				+ " Submissions");
-		return submissions;
-	}
+        } catch (IOException e) {
+            System.err.println("Codechef: Error fetching list. Error: "
+                    + e.getMessage());
+            // e.printStackTrace();
+        }
+
+        System.out.println("Codechef: Found " + submissions.size()
+                + " Submissions");
+
+        return submissions;
+    }
 }
