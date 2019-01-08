@@ -19,15 +19,15 @@ import com.koldbyte.codebackup.plugins.spoj.core.entities.SpojUser;
 
 public class SpojPluginImpl implements PluginInterface {
 
-	private final String HTTP = "http://";
+	private final String HTTPS = "https://";
 	private final String SUBMISSIONLIST = "www.spoj.com/status/:u/signedlist/";
 
-	private final String LOGINURL = "http://www.spoj.com/login";
+	private final String LOGINURL = HTTPS + "www.spoj.com/login";
 	
 	@Override
 	public List<Submission> getSolvedList(User user) {
 		List<Submission> subs = new ArrayList<Submission>();
-		String url = HTTP + SUBMISSIONLIST.replace(":u", user.getHandle());
+		String url = HTTPS + SUBMISSIONLIST.replace(":u", user.getHandle());
 
 		try {
 			//TODO: Add login to fetch the spoj signedlist
@@ -100,7 +100,7 @@ public class SpojPluginImpl implements PluginInterface {
 	@Override
 	public List<Submission> getAllSolvedList(User user) {
 		List<Submission> subs = new ArrayList<Submission>();
-		String url = HTTP + SUBMISSIONLIST.replace(":u", user.getHandle());
+		String url = HTTPS + SUBMISSIONLIST.replace(":u", user.getHandle());
 
 		try {
 			//TODO: Add login to fetch the spoj signedlist

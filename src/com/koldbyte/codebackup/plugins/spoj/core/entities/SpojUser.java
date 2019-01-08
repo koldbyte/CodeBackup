@@ -3,7 +3,7 @@ package com.koldbyte.codebackup.plugins.spoj.core.entities;
 import com.koldbyte.codebackup.core.entities.User;
 
 public class SpojUser extends User {
-	private final String HTTP = "http://";
+	private final String HTTPS = "https://";
 	private final String PROFILEURL = "www.spoj.com/users/:u/";
 
 	private String username;
@@ -36,7 +36,7 @@ public class SpojUser extends User {
 	@Override
 	public String getHandleFromProfileUrl() {
 		String handle = profileUrl;
-		handle = handle.replace(HTTP, "");
+		handle = handle.replace(HTTPS, "");
 		handle = handle.replace("www.spoj.com/users/", "");
 		handle = handle.replace("/", "");
 		return handle;
@@ -44,7 +44,7 @@ public class SpojUser extends User {
 
 	@Override
 	public String getProfileUrlFromHandle() {
-		return HTTP + PROFILEURL.replace(":u", this.handle);
+		return HTTPS + PROFILEURL.replace(":u", this.handle);
 	}
 
 	@Override
