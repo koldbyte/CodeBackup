@@ -114,12 +114,12 @@ public class TestApp {
 	}
 
 	public static void test8() {
-		Problem problem = new SpojProblem("http://www.spoj.com/problems/FCTRL/");
+		Problem problem = new SpojProblem("https://www.spoj.com/problems/FCTRL/");
 		System.out.println(problem.getProblemStatement());
 	}
 
 	public static void test9() {
-		User u = new SpojUser("koldbyte", "http://www.spoj.com/users/koldbyte/");
+		User u = new SpojUser("koldbyte", "https://www.spoj.com/users/koldbyte/");
 		PluginInterface plugin = new SpojPluginImpl();
 		List<Submission> list = plugin.getSolvedList(u);
 		for (Submission s : list) {
@@ -131,8 +131,8 @@ public class TestApp {
 	}
 
 	public static void test10() {
-		User u = new SpojUser("koldbyte", "http://www.spoj.com/users/koldbyte/");
-		Problem p = new SpojProblem("http://www.spoj.com/problems/BITMAP/");
+		User u = new SpojUser("koldbyte", "https://www.spoj.com/users/koldbyte/");
+		Problem p = new SpojProblem("https://www.spoj.com/problems/BITMAP/");
 		((SpojUser) u).setUsername("koldbyte");
 		((SpojUser) u).setPass("thisisrandompass");
 		Submission s = new SpojSubmission("11808446",

@@ -10,9 +10,9 @@ import com.koldbyte.codebackup.core.entities.Submission;
 import com.koldbyte.codebackup.core.entities.User;
 
 public class SpojSubmission extends Submission {
-	private final String HTTP = "http://";
+	private final String HTTPS = "https://";
 	private final String SUBMITTEDURL = "www.spoj.com/files/src/save/:s/";
-	private final String LOGINURL = "http://www.spoj.com/login";
+	private final String LOGINURL = HTTPS + "www.spoj.com/login";
 
 	@Override
 	public String fetchSubmittedCode() {
@@ -34,7 +34,7 @@ public class SpojSubmission extends Submission {
 					.method(Connection.Method.POST).execute();
 
 			// login done...now use the cookies to whenever u are fetching code
-			String url = HTTP + SUBMITTEDURL.replace(":s", submissionId);
+			String url = HTTPS + SUBMITTEDURL.replace(":s", submissionId);
 			String code = Jsoup.connect(url).ignoreContentType(true)
 					.cookies(loginForm.cookies()).method(Connection.Method.GET)
 					.execute().body();
@@ -57,7 +57,7 @@ public class SpojSubmission extends Submission {
 	@Override
 	public String getSubmissionIdFromUrl() {
 		String url = getSubmissionUrl();
-		url = url.replace(HTTP, "");
+		url = url.replace(HTTPS, "");
 		url = url.replace("www.spoj.com/files/src/save/", "");
 		url = url.replace("/", "");
 		return url;
@@ -65,7 +65,7 @@ public class SpojSubmission extends Submission {
 
 	@Override
 	public String getSubmissionUrlFromId() {
-		String subId = HTTP + SUBMITTEDURL.replace(":s", getSubmissionId());
+		String subId = HTTPS + SUBMITTEDURL.replace(":s", getSubmissionId());
 		return subId;
 	}
 

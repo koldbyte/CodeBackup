@@ -10,13 +10,13 @@ import org.jsoup.nodes.Entities.EscapeMode;
 import com.koldbyte.codebackup.core.entities.Problem;
 
 public class SpojProblem extends Problem {
-	private final String HTTP = "http://";
+	private final String HTTPS = "https://";
 	private final String PROBLEMURL = "www.spoj.com/problems/:p/";
 
 	@Override
 	public String fetchProblemStatement() {
 		String problem = getProblemId();
-		String url = HTTP + PROBLEMURL.replace(":p", problem);
+		String url = HTTPS + PROBLEMURL.replace(":p", problem);
 		/*-
 		 * Spoj Problem Page looks like this 
 		 * 
@@ -56,7 +56,7 @@ public class SpojProblem extends Problem {
 			// replace ":p" with the problem id
 			problemUrl.replace(":p", problemId);
 
-			url = HTTP + PROBLEMURL;
+			url = HTTPS + PROBLEMURL;
 			this.setUrl(url);
 		}
 		return url;
@@ -66,7 +66,7 @@ public class SpojProblem extends Problem {
 	public String getProblemId() {
 		if (problemId == null || problemId.isEmpty()) {
 			String u = getUrl();
-			u = u.replace(HTTP, "");
+			u = u.replace(HTTPS, "");
 			u = u.replace("www.spoj.com/problems/", "");
 			u = u.replace("/", "");
 			this.setProblemId(u);
